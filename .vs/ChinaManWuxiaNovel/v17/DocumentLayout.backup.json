@@ -1,0 +1,312 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\content\\projectiles\\guandaocustomswingprojectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:content\\projectiles\\guandaocustomswingprojectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\content\\items\\weapons\\landofillusionguandao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:content\\items\\weapons\\landofillusionguandao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\en-us.hjson||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:en-us.hjson||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\chinamanwuxianovel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:chinamanwuxianovel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\content\\items\\armor\\thelordofhongyuanhongluchestplate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:content\\items\\armor\\thelordofhongyuanhongluchestplate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\content\\items\\armor\\thelordofhongyuanhongluhead.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:content\\items\\armor\\thelordofhongyuanhongluhead.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\build.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:build.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\content\\items\\tools\\fpoon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:content\\items\\tools\\fpoon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\localization\\en-us_mods.chinamanfantasy.hjson||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:localization\\en-us_mods.chinamanfantasy.hjson||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ADMIN\\AppData\\Local\\Temp\\19c83ba7-e78f-4d69-94e7-0c6b6f7c212d_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ADMIN\\AppData\\Local\\Temp\\e3fb13af-2ec8-4c5c-8531-8aa719b5a121_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelChestplate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ADMIN\\AppData\\Local\\Temp\\a7da50c7-b6c4-4f50-9bec-f4ea961563a5_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 20,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e506b91c-c606-466a-90a9-123d1d1e12b3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:3:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "en-US.hjson",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\en-US.hjson",
+              "RelativeDocumentMoniker": "en-US.hjson",
+              "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\en-US.hjson",
+              "RelativeToolTip": "en-US.hjson",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-21T08:20:21.56Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GuanDaoCustomSwingProjectile.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Projectiles\\GuanDaoCustomSwingProjectile.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\GuanDaoCustomSwingProjectile.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Projectiles\\GuanDaoCustomSwingProjectile.cs",
+              "RelativeToolTip": "Content\\Projectiles\\GuanDaoCustomSwingProjectile.cs",
+              "ViewState": "AgIAALkAAAAAAAAAAAAgwBQBAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-21T07:10:27.543Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "GelHelmet.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\19c83ba7-e78f-4d69-94e7-0c6b6f7c212d_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\19c83ba7-e78f-4d69-94e7-0c6b6f7c212d_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\19c83ba7-e78f-4d69-94e7-0c6b6f7c212d_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs [Read Only]",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\19c83ba7-e78f-4d69-94e7-0c6b6f7c212d_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs [Read Only]",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACoAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-22T10:36:41.214Z",
+              "EditorCaption": " [Read Only]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "GelChestplate.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\e3fb13af-2ec8-4c5c-8531-8aa719b5a121_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelChestplate.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\e3fb13af-2ec8-4c5c-8531-8aa719b5a121_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelChestplate.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\e3fb13af-2ec8-4c5c-8531-8aa719b5a121_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelChestplate.cs [Read Only]",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\e3fb13af-2ec8-4c5c-8531-8aa719b5a121_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelChestplate.cs [Read Only]",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABkAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-22T10:34:29.16Z",
+              "EditorCaption": " [Read Only]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TheLordOfHongyuanHongLuChestPlate.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Armor\\TheLordOfHongyuanHongLuChestPlate.cs",
+              "RelativeDocumentMoniker": "Content\\Items\\Armor\\TheLordOfHongyuanHongLuChestPlate.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Armor\\TheLordOfHongyuanHongLuChestPlate.cs",
+              "RelativeToolTip": "Content\\Items\\Armor\\TheLordOfHongyuanHongLuChestPlate.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-22T10:29:40.197Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TheLordOfHongyuanHongLuHead.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Armor\\TheLordOfHongyuanHongLuHead.cs",
+              "RelativeDocumentMoniker": "Content\\Items\\Armor\\TheLordOfHongyuanHongLuHead.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Armor\\TheLordOfHongyuanHongLuHead.cs",
+              "RelativeToolTip": "Content\\Items\\Armor\\TheLordOfHongyuanHongLuHead.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-13T03:05:50.288Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ChinaManWuxiaNovel.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\ChinaManWuxiaNovel.cs",
+              "RelativeDocumentMoniker": "ChinaManWuxiaNovel.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\ChinaManWuxiaNovel.cs",
+              "RelativeToolTip": "ChinaManWuxiaNovel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-28T03:26:27.17Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "build.txt",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\build.txt",
+              "RelativeDocumentMoniker": "build.txt",
+              "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\build.txt",
+              "RelativeToolTip": "build.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2026-01-28T03:26:11.973Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "GelHelmet.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\a7da50c7-b6c4-4f50-9bec-f4ea961563a5_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\a7da50c7-b6c4-4f50-9bec-f4ea961563a5_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\a7da50c7-b6c4-4f50-9bec-f4ea961563a5_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs [Read Only]",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\a7da50c7-b6c4-4f50-9bec-f4ea961563a5_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs [Read Only]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-23T06:56:27.238Z",
+              "EditorCaption": " [Read Only]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Fpoon.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Tools\\Fpoon.cs",
+              "RelativeDocumentMoniker": "Content\\Items\\Tools\\Fpoon.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Tools\\Fpoon.cs",
+              "RelativeToolTip": "Content\\Items\\Tools\\Fpoon.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-22T01:52:19.345Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "en-US_Mods.ChinaMAnFantasy.hjson",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Localization\\en-US_Mods.ChinaMAnFantasy.hjson",
+              "RelativeDocumentMoniker": "Localization\\en-US_Mods.ChinaMAnFantasy.hjson",
+              "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Localization\\en-US_Mods.ChinaMAnFantasy.hjson",
+              "RelativeToolTip": "Localization\\en-US_Mods.ChinaMAnFantasy.hjson",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABYAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-01-20T16:18:18.656Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LandOfIllusionGuanDao.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Weapons\\LandOfIllusionGuanDao.cs",
+              "RelativeDocumentMoniker": "Content\\Items\\Weapons\\LandOfIllusionGuanDao.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Weapons\\LandOfIllusionGuanDao.cs",
+              "RelativeToolTip": "Content\\Items\\Weapons\\LandOfIllusionGuanDao.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAqwDEAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-18T03:29:08.773Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

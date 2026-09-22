@@ -1,0 +1,3 @@
+displayName = China Man Wuxia Novel
+author = Pot-8-O's
+version = 0.01

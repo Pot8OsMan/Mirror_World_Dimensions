@@ -1,0 +1,32 @@
+Mods: {
+	ChinaManWuxiaNovel: {
+		Items: {
+			The_Lord_Of_Hongyuan_Hong_Lu_Head: {
+				DisplayName: The_ Lord_ Of_ Hongyuan_ Hong_ Lu_ Head
+				Tooltip: ""
+			}
+
+			Fpoon: {
+				DisplayName: Fpoon
+				Tooltip: ""
+			}
+
+			LandOfIllusionGuanDao: {
+				DisplayName: Land Of Illusion Guan Dao
+				Tooltip: ""
+			}
+
+			TheLordOfHongyuanHongLuHead: {
+				DisplayName: The Lord Of Hongyuan Hong Lu Head
+				Tooltip: ""
+			}
+
+			TheLordOfHongyuanHongLuChestPlate: {
+				DisplayName: The Lord Of Hongyuan Hong Lu Chest Plate
+				Tooltip: ""
+			}
+		}
+
+		Projectiles.GuanDaoCustomSwingProjectile.DisplayName: Guan Dao Custom Swing Projectile
+	}
+}

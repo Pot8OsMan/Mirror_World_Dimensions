@@ -1,0 +1,12 @@
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaMAnFantasy\bin\Debug\net8.0\ChinaMAnFantasy.deps.json
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaMAnFantasy\bin\Debug\net8.0\ChinaMAnFantasy.dll
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaMAnFantasy\bin\Debug\net8.0\ChinaMAnFantasy.pdb
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaMAnFantasy\obj\Debug\net8.0\ChinaMAnFantasy.csproj.AssemblyReference.cache
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaMAnFantasy\obj\Debug\net8.0\ChinaMAnFantasy.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaMAnFantasy\obj\Debug\net8.0\ChinaMAnFantasy.AssemblyInfoInputs.cache
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaMAnFantasy\obj\Debug\net8.0\ChinaMAnFantasy.AssemblyInfo.cs
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaMAnFantasy\obj\Debug\net8.0\ChinaMAnFantasy.csproj.CoreCompileInputs.cache
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaMAnFantasy\obj\Debug\net8.0\ChinaMAnFantasy.dll
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaMAnFantasy\obj\Debug\net8.0\refint\ChinaMAnFantasy.dll
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaMAnFantasy\obj\Debug\net8.0\ChinaMAnFantasy.pdb
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaMAnFantasy\obj\Debug\net8.0\ref\ChinaMAnFantasy.dll

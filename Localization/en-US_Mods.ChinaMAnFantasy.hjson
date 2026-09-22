@@ -1,0 +1,35 @@
+# This file will automatically update with entries for new content after a build and reload.
+
+Items: {
+	LandOfIllusionGuanDao: {
+		DisplayName: Land Of Illusion Guan Dao
+		Tooltip:
+			'''
+			So this is what Daguanyuan looks like from the zenith of Hongyuan, huh?
+			Fuhu, then I suppose...
+			...I have need of this pretense no longer.
+			'''
+		Level: Level: {0}
+		Experience: Experience: {0} ({1} to next level)
+	}
+
+	Fpoon: {
+		DisplayName: Fpoon
+		Tooltip:
+			'''
+			Fuwah, is this a fpoon in the legends?
+			Fuhu, I wonder... So, is it a Fpoon or a Spork (Clearly it's called a Fpoon)
+			Ahaha~ The Will of the City told them so, who am I to argue~
+			'''
+	}
+
+	TheLordOfHongyuanHongLuHead: {
+		DisplayName: Bloody Red Tassel
+		Tooltip:
+			'''
+			There is no place for something so insignificant as [c/FF0000:Family].
+			[c/FF0000:You], who are ceaseless and hollow of vision toward Hongyuan, do not belong here.
+			Poise count: [i/s10:1508]
+			'''
+	}
+}
