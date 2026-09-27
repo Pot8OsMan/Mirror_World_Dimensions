@@ -7,6 +7,10 @@
 	<PropertyGroup>
 		
 	</PropertyGroup>
+	<ItemGroup>
+	  <Folder Include="Content\Buffs\" />
+	  <Folder Include="Content\NPCs\" />
+	</ItemGroup>
 
 	<!-- References -->
 

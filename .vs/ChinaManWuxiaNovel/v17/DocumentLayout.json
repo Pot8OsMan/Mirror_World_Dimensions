@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\content\\projectiles\\attackeffects\\guandaoslasheffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:content\\projectiles\\attackeffects\\guandaoslasheffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\content\\projectiles\\guandaocustomswingprojectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:content\\projectiles\\guandaocustomswingprojectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\content\\projectiles\\attackeffects\\guandaostompeffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:content\\projectiles\\attackeffects\\guandaostompeffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\content\\items\\weapons\\landofillusionguandao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:content\\items\\weapons\\landofillusionguandao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\content\\projectiles\\attackeffects\\guandaostabeffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|solutionrelative:content\\projectiles\\attackeffects\\guandaostabeffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C8D1965B-4D04-4D75-9468-8F03C504A4B7}|ChinaManWuxiaNovel.csproj|c:\\users\\admin\\onedrive\\documents\\my games\\terraria\\tmodloader\\modsources\\chinamanwuxianovel\\en-us.hjson||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -55,7 +67,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 20,
+          "SelectedChildIndex": 21,
           "Children": [
             {
               "$type": "Bookmark",
@@ -136,6 +148,43 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "GuanDaoStompEffect.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Projectiles\\AttackEffects\\GuanDaoStompEffect.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\AttackEffects\\GuanDaoStompEffect.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Projectiles\\AttackEffects\\GuanDaoStompEffect.cs",
+              "RelativeToolTip": "Content\\Projectiles\\AttackEffects\\GuanDaoStompEffect.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-22T08:18:11.771Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GuanDaoStabEffect.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Projectiles\\AttackEffects\\GuanDaoStabEffect.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\AttackEffects\\GuanDaoStabEffect.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Projectiles\\AttackEffects\\GuanDaoStabEffect.cs",
+              "RelativeToolTip": "Content\\Projectiles\\AttackEffects\\GuanDaoStabEffect.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-22T08:17:56.715Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GuanDaoSlashEffect.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Projectiles\\AttackEffects\\GuanDaoSlashEffect.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\AttackEffects\\GuanDaoSlashEffect.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Projectiles\\AttackEffects\\GuanDaoSlashEffect.cs",
+              "RelativeToolTip": "Content\\Projectiles\\AttackEffects\\GuanDaoSlashEffect.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAsAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-22T08:17:38.208Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "en-US.hjson",
               "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\en-US.hjson",
               "RelativeDocumentMoniker": "en-US.hjson",
@@ -147,20 +196,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "GuanDaoCustomSwingProjectile.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Projectiles\\GuanDaoCustomSwingProjectile.cs",
               "RelativeDocumentMoniker": "Content\\Projectiles\\GuanDaoCustomSwingProjectile.cs",
               "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Projectiles\\GuanDaoCustomSwingProjectile.cs",
               "RelativeToolTip": "Content\\Projectiles\\GuanDaoCustomSwingProjectile.cs",
-              "ViewState": "AgIAALYAAAAAAAAAAAAgwMoAAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAAAE8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-21T07:10:27.543Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 12,
               "Title": "GelHelmet.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\19c83ba7-e78f-4d69-94e7-0c6b6f7c212d_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\19c83ba7-e78f-4d69-94e7-0c6b6f7c212d_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs",
@@ -173,7 +222,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 13,
               "Title": "GelChestplate.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\e3fb13af-2ec8-4c5c-8531-8aa719b5a121_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelChestplate.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\e3fb13af-2ec8-4c5c-8531-8aa719b5a121_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelChestplate.cs",
@@ -186,7 +235,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "TheLordOfHongyuanHongLuChestPlate.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Armor\\TheLordOfHongyuanHongLuChestPlate.cs",
               "RelativeDocumentMoniker": "Content\\Items\\Armor\\TheLordOfHongyuanHongLuChestPlate.cs",
@@ -198,7 +247,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "TheLordOfHongyuanHongLuHead.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Armor\\TheLordOfHongyuanHongLuHead.cs",
               "RelativeDocumentMoniker": "Content\\Items\\Armor\\TheLordOfHongyuanHongLuHead.cs",
@@ -210,7 +259,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "ChinaManWuxiaNovel.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\ChinaManWuxiaNovel.cs",
               "RelativeDocumentMoniker": "ChinaManWuxiaNovel.cs",
@@ -222,7 +271,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "build.txt",
               "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\build.txt",
               "RelativeDocumentMoniker": "build.txt",
@@ -234,7 +283,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 14,
               "Title": "GelHelmet.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\a7da50c7-b6c4-4f50-9bec-f4ea961563a5_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\a7da50c7-b6c4-4f50-9bec-f4ea961563a5_RiptideMod-main.zip.RiptideMod-main.zip\\RiptideMod-main\\Armor\\GelHelmet.cs",
@@ -246,7 +295,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 10,
               "Title": "Fpoon.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Tools\\Fpoon.cs",
               "RelativeDocumentMoniker": "Content\\Items\\Tools\\Fpoon.cs",
@@ -258,7 +307,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 11,
               "Title": "en-US_Mods.ChinaMAnFantasy.hjson",
               "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Localization\\en-US_Mods.ChinaMAnFantasy.hjson",
               "RelativeDocumentMoniker": "Localization\\en-US_Mods.ChinaMAnFantasy.hjson",
@@ -270,13 +319,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "LandOfIllusionGuanDao.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Weapons\\LandOfIllusionGuanDao.cs",
               "RelativeDocumentMoniker": "Content\\Items\\Weapons\\LandOfIllusionGuanDao.cs",
               "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\ChinaManWuxiaNovel\\Content\\Items\\Weapons\\LandOfIllusionGuanDao.cs",
               "RelativeToolTip": "Content\\Items\\Weapons\\LandOfIllusionGuanDao.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAqwDEAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAqwA4AAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-18T03:29:08.773Z"
             }

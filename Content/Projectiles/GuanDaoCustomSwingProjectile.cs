@@ -65,6 +65,19 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             }
         }
 
+        private enum ComboAttack
+        {
+            Slash,
+            Stab,
+            SpinStomp
+        }
+
+        private ComboAttack CurrentCombo
+        {
+            get => (ComboAttack)Projectile.ai[0];
+            set => Projectile.ai[0] = (float)value;
+        }
+
         // Variables to keep track of during runtime
         private ref float InitialAngle => ref Projectile.ai[1]; // Angle aimed in (with constraints)
         private ref float Timer => ref Projectile.ai[2]; // Timer to keep track of progression of each stage
@@ -189,20 +202,12 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 origin = new Vector2(20, texture.Height - 20);
                 rotationOffset = MathHelper.ToRadians(45f);
                 effects = SpriteEffects.None;
-                Dust.NewDustPerfect(
-                    Projectile.TopRight,
-                    DustID.RedTorch
-                );
             }
             else
             {
                 origin = new Vector2(texture.Width - 20, texture.Height - 20);
                 rotationOffset = MathHelper.ToRadians(135f);
                 effects = SpriteEffects.FlipHorizontally;
-                Dust.NewDustPerfect(
-                    Projectile.TopLeft,
-                    DustID.RedTorch
-                );
             }
 
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
