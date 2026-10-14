@@ -50,5 +50,11 @@ namespace ChinaManWuxiaNovel.Content.Items.Weapons
             recipe.AddTile(TileID.Anvils);
             recipe.Register();
         }
+
+        public override bool AltFunctionUse(Player player)
+        {
+            return true;
+        }
+
     }
 }

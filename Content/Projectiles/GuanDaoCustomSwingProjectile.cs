@@ -28,6 +28,86 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const float FIRSTHALFSTAB = 0.3f;
         private const float STABTIME = 0.8f;
 
+
+        // =========================================
+        // SLASH ANIMATION SETTINGS
+        // =========================================
+
+        private const float SLASH_SCALE = 1f;
+        private const float WEAPON_REACH = 100f;
+
+        private const int SLASH_FRAME_COUNT = 6;
+        private const int SLASH_FRAME_SPEED = 2;
+
+        // Path to the vertical sprite sheet.
+        private Texture2D SlashTexture =>
+            ModContent.Request<Texture2D>(
+                "ChinaManWuxiaNovel/Content/Projectiles/GuanDaoMoveset/SlashEffect"
+            ).Value;
+
+        // Select which frame to show based on the attack timer.
+        private int GetSlashFrame()
+        {
+            int frame = (int)(Timer / SLASH_FRAME_SPEED);
+
+            return Math.Clamp(
+                frame,
+                0,
+                SLASH_FRAME_COUNT - 1
+            );
+        }
+
+        // Draw the smear separately from the weapon.
+        private void DrawSlashEffect(Color lightColor)
+        {
+            // Only display the smear during a normal slash.
+            if (CurrentAttack != AttackType.Swing ||
+                CurrentStage != AttackStage.Execute)
+            {
+                return;
+            }
+
+            Texture2D texture = SlashTexture;
+
+            // The sprite sheet contains 6 vertically stacked frames.
+            int frameHeight = texture.Height / SLASH_FRAME_COUNT;
+            int frame = GetSlashFrame();
+
+            Rectangle source = new Rectangle(
+                0,
+                frame * frameHeight,
+                texture.Width,
+                frameHeight
+            );
+
+            // Pivot: bottom-left when facing right,
+            // bottom-right when facing left.
+            Vector2 origin = Projectile.spriteDirection > 0
+                ? new Vector2(0f, frameHeight)
+                : new Vector2(texture.Width, frameHeight);
+
+            SpriteEffects effects = Projectile.spriteDirection > 0
+                ? SpriteEffects.None
+                : SpriteEffects.FlipHorizontally;
+
+            // Match the weapon's existing sprite orientation.
+            float rotationOffset = Projectile.spriteDirection > 0
+                ? MathHelper.ToRadians(45f)
+                : MathHelper.ToRadians(135f);
+
+            Main.spriteBatch.Draw(
+                texture,
+                Projectile.Center - Main.screenPosition,
+                source,
+                lightColor * Projectile.Opacity,
+                Projectile.rotation + rotationOffset,
+                origin,
+                Projectile.scale * SLASH_SCALE,
+                effects,
+                0f
+            );
+        }
+
         private enum AttackType // Which attack is being performed
         {
             // Swings are normal sword swings that can be slightly aimed
@@ -77,6 +157,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             get => (ComboAttack)Projectile.ai[0];
             set => Projectile.ai[0] = (float)value;
         }
+
 
         // Variables to keep track of during runtime
         private ref float InitialAngle => ref Projectile.ai[1]; // Angle aimed in (with constraints)
@@ -187,50 +268,146 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             Timer++;
         }
 
+        private void CreateSlashDust()
+        {
+            // Dust is cosmetic; skip spawning on a dedicated server.
+            if (Main.netMode == NetmodeID.Server)
+                return;
+
+            // Control how frequently the spray appears.
+            if (!Main.rand.NextBool(2))
+                return;
+
+            Vector2 direction = Projectile.rotation.ToRotationVector2();
+
+            // Perpendicular direction for the sideways spray.
+            Vector2 sideways = new Vector2(-direction.Y, direction.X);
+
+            // Spawn several particles per emission.
+            int particleCount = Main.rand.Next(2, 5);
+
+            for (int i = 0; i < particleCount; i++)
+            {
+                // Spawn toward the forward half of the weapon.
+                float distance = Main.rand.NextFloat(35f, 100f);
+
+                Vector2 position =
+                    Owner.MountedCenter + direction * distance;
+
+                // Add a little sideways variation to the spawn position.
+                position += sideways * Main.rand.NextFloat(-8f, 8f);
+
+                int dustType = Main.rand.NextBool(4)
+                    ? DustID.BloodWater
+                    : DustID.Blood;
+
+                // Spray mostly forward, with random sideways movement.
+                Vector2 velocity =
+                    direction * Main.rand.NextFloat(1.5f, 5f)
+                    + sideways * Main.rand.NextFloat(-2.5f, 2.5f);
+
+                Dust dust = Dust.NewDustPerfect(
+                    position,
+                    dustType,
+                    velocity,
+                    80,
+                    dustType == DustID.Blood
+                        ? Color.OrangeRed
+                        : new Color(180, 15, 25),
+                    Main.rand.NextFloat(0.9f, 1.6f)
+                );
+
+                dust.noGravity = true;
+                dust.fadeIn = 0.5f;
+            }
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
-            // Calculate origin of sword (hilt) based on orientation and offset sword rotation (as sword is angled in its sprite)
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+
             Vector2 origin;
             float rotationOffset;
             SpriteEffects effects;
 
-            
-            Texture2D texture = TextureAssets.Projectile[Type].Value;
-
             if (Projectile.spriteDirection > 0)
             {
-                origin = new Vector2(20, texture.Height - 20);
+                origin = new Vector2(0f, texture.Height);
                 rotationOffset = MathHelper.ToRadians(45f);
                 effects = SpriteEffects.None;
             }
             else
             {
-                origin = new Vector2(texture.Width - 20, texture.Height - 20);
+                origin = new Vector2(
+                    texture.Width,
+                    texture.Height
+                );
+
                 rotationOffset = MathHelper.ToRadians(135f);
                 effects = SpriteEffects.FlipHorizontally;
             }
 
-            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
+            // Draw the Guan Dao behind the vfx.
+            Main.spriteBatch.Draw(
+                texture,
+                Projectile.Center - Main.screenPosition,
+                null,
+                lightColor * Projectile.Opacity,
+                Projectile.rotation + rotationOffset,
+                origin,
+                Projectile.scale,
+                effects,
+                0f
+            );
 
-            // Since we are doing a custom draw, prevent it from normally drawing
+            // Vfx infront the weapon.
+            DrawSlashEffect(lightColor);
+
+            // We handled drawing manually.
             return false;
         }
 
-        // Find the start and end of the sword and use a line collider to check for collision with enemies
+
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            Vector2 start = Owner.MountedCenter;
-            Vector2 end = start + Projectile.rotation.ToRotationVector2() * ((Projectile.Size.Length()) * Projectile.scale);
+            // Start at the weapon's actual drawing pivot.
+            Vector2 start = Projectile.Center;
+
+            // The existing drawing rotation offset compensates for
+            // the diagonal weapon sprite, so rotation gives its blade direction.
+            Vector2 direction = Projectile.rotation.ToRotationVector2();
+
+            // Match the collision length to the visible weapon.
+            Vector2 end = start
+                + direction * WEAPON_REACH * Projectile.scale;
+
             float collisionPoint = 0f;
-            return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), start, end, 15f * Projectile.scale, ref collisionPoint);
+
+            return Collision.CheckAABBvLineCollision(
+                targetHitbox.TopLeft(),
+                targetHitbox.Size(),
+                start,
+                end,
+                8f * Projectile.scale,
+                ref collisionPoint
+            );
         }
 
-        // Do a similar collision check for tiles
         public override void CutTiles()
         {
-            Vector2 start = Owner.MountedCenter;
-            Vector2 end = start + Projectile.rotation.ToRotationVector2() * (Projectile.Size.Length() * Projectile.scale);
-            Utils.PlotTileLine(start, end, 15 * Projectile.scale, DelegateMethods.CutTiles);
+            Vector2 start = Projectile.Center;
+
+            Vector2 end = start
+                + Projectile.rotation.ToRotationVector2()
+                * WEAPON_REACH
+                * Projectile.scale;
+
+            Utils.PlotTileLine(
+                start,
+                end,
+                8f * Projectile.scale,
+                DelegateMethods.CutTiles
+            );
         }
 
         // We make it so that the projectile can only do damage in its release and unwind phases
@@ -288,25 +465,42 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         }
 
         // Function facilitating the first half of the swing
+
         private void ExecuteStrike()
         {
+            // PHASE 1: SLASH
             if (CurrentAttack == AttackType.Swing)
             {
-                Progress = MathHelper.SmoothStep(0, SWINGRANGE, (1f - UNWIND) * Timer / execTime);
+                // Move the weapon along its curved swing trajectory.
+                Progress = MathHelper.SmoothStep(
+                    0f,
+                    SWINGRANGE,
+                    (1f - UNWIND) * Timer / execTime
+                );
 
+                // Emit dust during the slash.
+                CreateSlashDust();
+
+                // Finish the attack when its execution time expires.
                 if (Timer >= execTime)
                 {
                     CurrentStage = AttackStage.Unwind;
                 }
             }
-            else
-            {
-                Progress = MathHelper.SmoothStep(0, SPINRANGE, (1f - UNWIND / 2) * Timer / (execTime * SPINTIME));
 
-                if (Timer == (int)(execTime * SPINTIME * 3 / 4))
+            // Existing spin attack.
+            else if (CurrentAttack == AttackType.Spin)
+            {
+                Progress = MathHelper.SmoothStep(
+                    0f,
+                    SPINRANGE,
+                    (1f - UNWIND / 2f) * Timer / (execTime * SPINTIME)
+                );
+
+                if (Timer == (int)(execTime * SPINTIME * 3f / 4f))
                 {
-                    SoundEngine.PlaySound(SoundID.Item1); // Play sword sound again
-                    Projectile.ResetLocalNPCHitImmunity(); // Reset the local npc hit immunity for second half of spin
+                    SoundEngine.PlaySound(SoundID.Item1);
+                    Projectile.ResetLocalNPCHitImmunity();
                 }
 
                 if (Timer >= execTime * SPINTIME)
@@ -314,6 +508,8 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                     CurrentStage = AttackStage.Unwind;
                 }
             }
+
+            // Stab will receive its own movement logic later.
         }
 
         // Function facilitating the latter half of the swing where the sword disappears
