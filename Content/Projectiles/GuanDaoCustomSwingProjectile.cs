@@ -24,10 +24,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const float UNWIND = 0.4f; // When should the sword start disappearing
         private const float SPINTIME = 2.5f; // How much longer a spin is than a swing
 
-        private const float STABRANGE = 9.2f;
-        private const float FIRSTHALFSTAB = 0.3f;
-        private const float STABTIME = 0.8f;
-
 
         // =========================================
         // SLASH ANIMATION SETTINGS
@@ -38,6 +34,19 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
         private const int SLASH_FRAME_COUNT = 6;
         private const int SLASH_FRAME_SPEED = 2;
+
+
+        // =========================================
+        // STAB ANIMATION SETTINGS
+        // =========================================
+
+        private const float STAB_DISTANCE = 38f;
+        private const float STAB_EXECUTION_MULTIPLIER = 0.8f;
+        private const float STAB_RETRACT_MULTIPLIER = 0.6f;
+
+
+        private const int STAB_FRAME_COUNT = 4;
+        private const int STAB_FRAME_SPEED = 2;
 
         // Path to the vertical sprite sheet.
         private Texture2D SlashTexture =>
@@ -110,15 +119,9 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
         private enum AttackType // Which attack is being performed
         {
-            // Swings are normal sword swings that can be slightly aimed
-            // Swings goes through the full cycle of animations
-            Swing,
-            // Spins are swings that go full circle
-            // They are slower and deal more knockback
-            Spin,
-            // Stabs are piercing attacks that strikes forward
-            // Stabs are quick and precise with quick recovery
-            Stab
+            Swing = 0, // Phase 1: Slash
+            Stab = 1,  // Phase 2: Thrust
+            Spin = 2   // Phase 3: Spin-stomp
         }
 
         private enum AttackStage // What stage of the attack is being executed, see functions found in AI for description
@@ -168,11 +171,18 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         // We define timing functions for each stage, taking into account melee attack speed
         // Note that you can change this to suit the need of your projectile
         private float prepTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
+
         private float execTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
+
         private float hideTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
 
+        //Stab properties
+        private float stabExecTime => execTime * STAB_EXECUTION_MULTIPLIER;
+
+        private float stabHideTime => hideTime * STAB_RETRACT_MULTIPLIER;
+
         public override string Texture => "ChinaManWuxiaNovel/Content/Items/Weapons/LandOfIllusionGuanDao"; // Projectile texture
-        private Player Owner => Main.player[Projectile.owner];
+        private Player Owner => Main.player[Projectile.owner]; //Player position
 
         public override void SetStaticDefaults()
         {
@@ -191,24 +201,32 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             Projectile.usesLocalNPCImmunity = true; // Uses local immunity frames
             Projectile.localNPCHitCooldown = -1; // We set this to -1 to make sure the projectile doesn't hit twice
             Projectile.ownerHitCheck = true; // Make sure the owner of the projectile has line of sight to the target (aka can't hit things through tile).
-            Projectile.DamageType = DamageClass.Melee; // Projectile is a melee projectile
+            Projectile.DamageType = DamageClass.Summon; // Projectile is a summoner projectile
         }
 
         public override void OnSpawn(IEntitySource source)
         {
+            CurrentStage = AttackStage.Prepare;
+
             Projectile.spriteDirection = Main.MouseWorld.X > Owner.MountedCenter.X ? 1 : -1;
+
             float targetAngle = (Main.MouseWorld - Owner.MountedCenter).ToRotation();
 
             if (CurrentAttack == AttackType.Spin)
             {
-                InitialAngle = (float)(-Math.PI / 2 - Math.PI * 1 / 3 * Projectile.spriteDirection); // For the spin, starting angle is designated based on direction of hit
+                InitialAngle = (float)(-Math.PI / 2 - Math.PI / 3 * Projectile.spriteDirection); // For the spin, starting angle is designated based on direction of hit
+            }
+            else if (CurrentAttack == AttackType.Stab)
+            {
+                // A stab aims directly at the cursor.
+                InitialAngle = targetAngle;
             }
             else
             {
                 if (Projectile.spriteDirection == 1)
                 {
                     // However, we limit the angle of possible directions so it does not look too ridiculous
-                    targetAngle = MathHelper.Clamp(targetAngle, (float)-Math.PI * 1 / 3, (float)Math.PI * 1 / 6);
+                    targetAngle = MathHelper.Clamp(targetAngle, (float)-Math.PI / 3, (float)Math.PI / 6);
                 }
                 else
                 {
@@ -264,7 +282,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                     break;
             }
 
-            SetSwordPosition();
+            SetGuanDaoPosition();
             Timer++;
         }
 
@@ -319,6 +337,58 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
                 dust.noGravity = true;
                 dust.fadeIn = 0.5f;
+            }
+        }
+
+        private void CreateStabDust()
+        {
+            if (Main.netMode == NetmodeID.Server)
+                return;
+
+            // Don't spawn particles until the thrust has started.
+            if (Progress < 0.15f)
+                return;
+
+            // Keep the effect reasonably lightweight.
+            if (!Main.rand.NextBool(2))
+                return;
+
+            Vector2 direction = InitialAngle.ToRotationVector2();
+            Vector2 sideways = new Vector2(-direction.Y, direction.X);
+
+            // Follow the weapon's forward movement.
+            Vector2 position =
+                Owner.GetFrontHandPosition(
+                    Player.CompositeArmStretchAmount.Full,
+                    InitialAngle - MathHelper.PiOver2
+                );
+
+            position.Y += Owner.gfxOffY;
+
+            position += direction * (STAB_DISTANCE * Progress);
+
+            int count = Main.rand.Next(1, 4);
+
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 spawnPosition =
+                    position + sideways * Main.rand.NextFloat(-8f, 8f);
+
+                Vector2 velocity =
+                    direction * Main.rand.NextFloat(2f, 5f)
+                    + sideways * Main.rand.NextFloat(-1.5f, 1.5f);
+
+                Dust dust = Dust.NewDustPerfect(
+                    spawnPosition,
+                    DustID.Torch,
+                    velocity,
+                    100,
+                    Color.OrangeRed,
+                    Main.rand.NextFloat(0.8f, 1.3f)
+                );
+
+                dust.noGravity = true;
+                dust.fadeIn = 0.3f;
             }
         }
 
@@ -418,20 +488,64 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             return base.CanDamage();
         }
 
+        private float GetComboDamageMultiplier()
+        {
+            switch (CurrentAttack)
+            {
+                case AttackType.Swing:
+                    return 1.00f;
+
+                case AttackType.Stab:
+                    return 1.5f;
+
+                case AttackType.Spin:
+                    return 1.8f;
+
+                default:
+                    return 1.00f;
+            }
+        }
+
+        private float GetFinalDamageMultiplier(NPC target)
+        {
+            float multiplier = GetComboDamageMultiplier();
+
+            // Future conditional modifiers go here.
+            // Example: bonus damage against a particular enemy type,
+            // a target with your custom status, or a late-game boss.
+
+            return multiplier;
+        }
+
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             // Make knockback go away from player
             modifiers.HitDirectionOverride = target.position.X > Owner.MountedCenter.X ? 1 : -1;
 
-            // If the NPC is hit by the spin attack, increase knockback slightly
+            modifiers.SourceDamage *= GetFinalDamageMultiplier(target);
+
+            // Preserve the spin's extra knockback.
             if (CurrentAttack == AttackType.Spin)
-                modifiers.Knockback += 1;
+            {
+                modifiers.Knockback += 1f;
+            }
         }
 
         // Function to easily set projectile and arm position
-        public void SetSwordPosition()
+        public void SetGuanDaoPosition()
         {
-            Projectile.rotation = InitialAngle + Projectile.spriteDirection * Progress; // Set projectile rotation
+            // Set projectile rotation based on attck types
+            if (CurrentAttack == AttackType.Stab)
+            {
+                // Keep the blade pointed in one direction.
+                Projectile.rotation = InitialAngle;
+            }
+            else
+            {
+                // Preserve the curved movement of the slash and spin.
+                Projectile.rotation =
+                    InitialAngle + Projectile.spriteDirection * Progress;
+            }
 
             // Set composite arm allows you to set the rotation of the arm and stretch of the front and back arms independently
             Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.ToRadians(90f)); // set arm position (90 degree offset since arm starts lowered)
@@ -445,6 +559,18 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             }
 
             armPosition.Y += Owner.gfxOffY;
+
+            // Stab motion
+            if (CurrentAttack == AttackType.Stab)
+            {
+                // During a stab, move the entire weapon forward
+                // instead of rotating it through a swing arc.
+                Vector2 thrustDirection =
+                    InitialAngle.ToRotationVector2();
+
+                armPosition += thrustDirection * STAB_DISTANCE * Progress;
+            }
+
             Projectile.Center = armPosition; // Set projectile to arm position
             Projectile.scale = Size * 1.2f * Owner.GetAdjustedItemScale(Owner.HeldItem); // Slightly scale up the projectile and also take into account melee size modifiers
 
@@ -488,6 +614,24 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 }
             }
 
+            // PHASE 2: STAB
+            else if (CurrentAttack == AttackType.Stab)
+            {
+                // Thrust from the hand toward the target.
+                Progress = MathHelper.SmoothStep(
+                    0f,
+                    1f,
+                    MathHelper.Clamp(Timer / stabExecTime, 0f, 1f)
+                );
+
+                CreateStabDust();
+
+                if (Timer >= stabExecTime)
+                {
+                    CurrentStage = AttackStage.Unwind;
+                }
+            }
+
             // Existing spin attack.
             else if (CurrentAttack == AttackType.Spin)
             {
@@ -525,6 +669,30 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                     Projectile.Kill();
                 }
             }
+
+            // STAB RECOVERY
+            else if (CurrentAttack == AttackType.Stab)
+            {
+                // Retract from the fully extended position back to the hand.
+                Progress = 1f - MathHelper.SmoothStep(
+                    0f,
+                    1f,
+                    MathHelper.Clamp(Timer / stabHideTime, 0f, 1f)
+                );
+
+                Size = 1f - MathHelper.SmoothStep(
+                    1f,
+                    1f,
+                    Timer / stabHideTime
+                );
+
+                if (Timer >= stabHideTime)
+                {
+                    Projectile.Kill();
+                }
+            }
+
+            // SPIN RECOVERY
             else
             {
                 Progress = MathHelper.SmoothStep(0, SPINRANGE, (1f - UNWIND / 2) + UNWIND / 2 * Timer / (hideTime * SPINTIME / 2));

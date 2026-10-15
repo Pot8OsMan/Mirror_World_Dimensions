@@ -27,6 +27,9 @@ Items: {
 		DisplayName: Bloody Red Tassel
 		Tooltip:
 			'''
+			MB1: Unleash attacks that does decent damage and scales with each Heishou's branch damage modifiers
+			MB2: Guard, enter a defensive state. If any Heishou Packs unit is available on field, all summoned unit(s) will retreat to guard the leash holder
+
 			There is no place for something so insignificant as [c/FF0000:Family].
 			[c/FF0000:You], who are ceaseless and hollow of vision toward Hongyuan, do not belong here.
 			Poise count: [i/s10:1508]
