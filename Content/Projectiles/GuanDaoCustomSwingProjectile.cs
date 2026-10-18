@@ -66,8 +66,15 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const float STOMP_IMPACT_TIME = 3f;
         private const float STOMP_RECOVERY_TIME = 10f;
 
-        private const float STOMP_FORWARD_OFFSET = 42f;
-        private const float STOMP_RADIUS = 100f;
+        private const float STOMP_FORWARD_OFFSET = 5f;
+        private const float STOMP_RADIUS = 150f;
+
+        private const float STOMP_RAISE_HEIGHT = 55f;
+        private const float STOMP_FORWARD_DISTANCE = 35f;
+
+        // Weapon sprite rotation offsets relative to its spin pose.
+        private const float STOMP_RAISED_ANGLE = -0.65f;
+        private const float STOMP_DOWN_ANGLE = 0.9f;
 
 
         // Path to the vertical sprite sheet.
@@ -93,7 +100,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             Swing = 0, // Phase 1: Slash
             ReverseSwing = 1,  // Phase 2: Upper Slash
             Stab = 2,  // Phase 3: Thrust
-            Spin = 3    // Phase 4: Spin-stomp
+            SpinStomp = 3    // Phase 4: Spin-stomp
         }
 
         // Draw the smear separately from the weapon.
@@ -243,13 +250,13 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
             float targetAngle = (Main.MouseWorld - Owner.MountedCenter).ToRotation();
 
-            if (CurrentAttack == AttackType.Spin)
+            if (CurrentAttack == AttackType.SpinStomp)
             {
                 InitialAngle = (float)(-Math.PI / 2 - Math.PI / 3 * Projectile.spriteDirection); // For the spin, starting angle is designated based on direction of hit
             }
             else if (CurrentAttack == AttackType.ReverseSwing)
             {
-                InitialAngle = (float)(Math.PI / 2 + Math.PI / 3 *Projectile.spriteDirection);
+                InitialAngle = (float)(Math.PI / 2 *Projectile.spriteDirection);
             }
             else if (CurrentAttack == AttackType.Stab)
             {
@@ -301,8 +308,18 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 case AttackStage.Execute:
                     ExecuteStrike();
                     break;
-                default:
+                case AttackStage.Unwind:
                     UnwindStrike();
+                    break;
+
+                case AttackStage.StompWindup:
+                    StompWindup();
+                    break;
+                case AttackStage.StompImpact:
+                    StompImpact();
+                    break;
+                case AttackStage.StompRecovery:
+                    StompRecovery();
                     break;
             }
 
@@ -450,11 +467,14 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 }
                 else
                 {
-                    if (CurrentAttack == AttackType.Spin)
-                    { origin = new Vector2(-40, texture.Height - 40f); }
+                    if (CurrentAttack == AttackType.SpinStomp)
+                    { 
+                        origin = new Vector2(40f, texture.Height - 40f);
+                    }
                     else
-                    { origin = new Vector2(0f, texture.Height); }
-                    
+                    { 
+                        origin = new Vector2(0f, texture.Height);
+                    }
                     rotationOffset = MathHelper.ToRadians(45f);
                     effects = SpriteEffects.None;
                 }
@@ -468,7 +488,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                     effects = SpriteEffects.None;
                 }
                 else {
-                    if (CurrentAttack == AttackType.Spin)
+                    if (CurrentAttack == AttackType.SpinStomp)
                     {
                         origin = new Vector2(
                             texture.Width - 40f,
@@ -482,7 +502,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                             texture.Height
                         );
                     }
-
                     rotationOffset = MathHelper.ToRadians(135f);
                     effects = SpriteEffects.FlipHorizontally;
                 }
@@ -508,8 +527,45 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             return false;
         }
 
+        // Stomp attacks AoE hitbox position
+        private Vector2 GetStompCenter()
+        {
+            float facing = Projectile.spriteDirection;
+
+            return new Vector2(
+                Owner.MountedCenter.X + facing * STOMP_FORWARD_OFFSET,
+                Owner.Bottom.Y - 8f
+            );
+        }
+
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
+            // The stomp collider uses a circular area rather than drawing a weapon line.
+            if (CurrentAttack == AttackType.SpinStomp &&
+                CurrentStage == AttackStage.StompImpact)
+            {
+                Vector2 center = GetStompCenter();
+
+                // Find the closest point on the enemy hitbox.
+                float closestX = MathHelper.Clamp(
+                    center.X,
+                    targetHitbox.Left,
+                    targetHitbox.Right
+                );
+
+                float closestY = MathHelper.Clamp(
+                    center.Y,
+                    targetHitbox.Top,
+                    targetHitbox.Bottom
+                );
+
+                float dx = center.X - closestX;
+                float dy = center.Y - closestY;
+
+                return dx * dx + dy * dy
+                    <= STOMP_RADIUS * STOMP_RADIUS;
+            }
+
             // Start at the weapon's actual drawing pivot.
             Vector2 start = Projectile.Center;
 
@@ -553,8 +609,17 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         // We make it so that the projectile can only do damage in its release and unwind phases
         public override bool? CanDamage()
         {
+            // Wind-up phase does no dmg
             if (CurrentStage == AttackStage.Prepare)
                 return false;
+
+            // Spin is harmless until its impact stage.
+            if (CurrentAttack == AttackType.SpinStomp)
+            {
+                return CurrentStage == AttackStage.StompImpact
+                    ? null
+                    : false;
+            }
             return base.CanDamage();
         }
 
@@ -571,7 +636,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 case AttackType.Stab:
                     return 1.5f;
 
-                case AttackType.Spin:
+                case AttackType.SpinStomp:
                     return 1.8f;
 
                 default:
@@ -604,7 +669,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             }
 
             // Preserve the spin's extra knockback.
-            if (CurrentAttack == AttackType.Spin)
+            if (CurrentAttack == AttackType.SpinStomp)
             {
                 modifiers.Knockback += 1f;
             }
@@ -731,27 +796,21 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             }
 
             // Existing spin attack.
-            else if (CurrentAttack == AttackType.Spin)
+            else if (CurrentAttack == AttackType.SpinStomp)
             {
                 Progress = MathHelper.SmoothStep(
                     0f,
                     SPINRANGE,
-                    (1f - UNWIND / 2f) * Timer / (execTime * SPINTIME)
+                    //(1f - UNWIND / 2f) * Timer / (execTime * SPINTIME)
+                    MathHelper.Clamp( Timer / SPIN_REPOSITION_TIME, 0f, 1f )
                 );
 
-                if (Timer == (int)(execTime * SPINTIME * 3f / 4f))
+                if (Timer >= SPIN_REPOSITION_TIME)
                 {
-                    SoundEngine.PlaySound(SoundID.Item1);
-                    Projectile.ResetLocalNPCHitImmunity();
-                }
-
-                if (Timer >= execTime * SPINTIME)
-                {
-                    CurrentStage = AttackStage.Unwind;
+                    CurrentStage = AttackStage.StompWindup;
                 }
             }
 
-            // Stab will receive its own movement logic later.
         }
 
         // Function facilitating the latter half of the swing where the sword disappears
@@ -807,5 +866,48 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 }
             }
         }
+
+        // Whole ass moveset for one flashy Stomp attack
+        private void StompWindup()
+        {
+            // Hold the weapon in its repositioned pose.
+            // Animate the weapon moving upward/downward in front of player model
+            // in SetGuanDaoPosition() as the next visual refinement.
+            Progress = SPINRANGE;
+
+            if (Timer >= STOMP_WINDUP_TIME)
+            {
+                CurrentStage = AttackStage.StompImpact;
+            }
+        }
+
+        private void StompImpact()
+        {
+            // Keep the weapon at the impact pose.
+            Progress = SPINRANGE;
+
+            if (Timer == 0)
+            {
+                SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
+            }
+
+            // Damage is enabled only during this stage.
+            if (Timer >= STOMP_IMPACT_TIME)
+            {
+                CurrentStage = AttackStage.StompRecovery;
+            }
+        }
+
+        private void StompRecovery()
+        {
+            // Brief recovery before the combo projectile disappears.
+            Progress = SPINRANGE;
+
+            if (Timer >= STOMP_RECOVERY_TIME)
+            {
+                Projectile.Kill();
+            }
+        }
+
     }
 }
