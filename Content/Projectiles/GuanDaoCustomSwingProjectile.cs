@@ -35,6 +35,16 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const int SLASH_FRAME_COUNT = 6;
         private const int SLASH_FRAME_SPEED = 2;
 
+        // =========================================
+        // UPPER SLASH ANIMATION SETTINGS
+        // =========================================
+
+        private const float UPPER_SLASH_SCALE = 1f;
+        private const float UPPERSLASH_WEAPON_REACH = 100f;
+
+        private const int UPPER_SLASH_FRAME_COUNT = 6;
+        private const int UPPER_SLASH_FRAME_SPEED = 2;
+
 
         // =========================================
         // STAB ANIMATION SETTINGS
@@ -44,9 +54,21 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const float STAB_EXECUTION_MULTIPLIER = 0.8f;
         private const float STAB_RETRACT_MULTIPLIER = 0.6f;
 
-
         private const int STAB_FRAME_COUNT = 4;
-        private const int STAB_FRAME_SPEED = 2;
+        private const int STAB_FRAME_SPEED = 1;
+
+        // =========================================
+        // SPIN ANIMATION SETTINGS
+        // =========================================
+
+        private const float SPIN_REPOSITION_TIME = 5f;
+        private const float STOMP_WINDUP_TIME = 5f;
+        private const float STOMP_IMPACT_TIME = 3f;
+        private const float STOMP_RECOVERY_TIME = 10f;
+
+        private const float STOMP_FORWARD_OFFSET = 42f;
+        private const float STOMP_RADIUS = 100f;
+
 
         // Path to the vertical sprite sheet.
         private Texture2D SlashTexture =>
@@ -65,11 +87,19 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 SLASH_FRAME_COUNT - 1
             );
         }
+        
+        private enum AttackType // Which attack is being performed
+        {
+            Swing = 0, // Phase 1: Slash
+            ReverseSwing = 1,  // Phase 2: Upper Slash
+            Stab = 2,  // Phase 3: Thrust
+            Spin = 3    // Phase 4: Spin-stomp
+        }
 
         // Draw the smear separately from the weapon.
         private void DrawSlashEffect(Color lightColor)
         {
-            // Only display the smear during a normal slash.
+            // Only display the smear during a slash.
             if (CurrentAttack != AttackType.Swing ||
                 CurrentStage != AttackStage.Execute)
             {
@@ -117,18 +147,16 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             );
         }
 
-        private enum AttackType // Which attack is being performed
-        {
-            Swing = 0, // Phase 1: Slash
-            Stab = 1,  // Phase 2: Thrust
-            Spin = 2   // Phase 3: Spin-stomp
-        }
-
         private enum AttackStage // What stage of the attack is being executed, see functions found in AI for description
         {
             Prepare,
             Execute,
-            Unwind
+            Unwind,
+
+            // Flashy weapon handle for one singular move in the weapon's moveset
+            StompWindup,
+            StompImpact,
+            StompRecovery
         }
 
         // These properties wrap the usual ai and localAI arrays for cleaner and easier to understand code.
@@ -151,8 +179,9 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private enum ComboAttack
         {
             Slash,
+            ReverseSlash,
             Stab,
-            SpinStomp
+            SpinStomp,
         }
 
         private ComboAttack CurrentCombo
@@ -161,20 +190,22 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             set => Projectile.ai[0] = (float)value;
         }
 
-
         // Variables to keep track of during runtime
         private ref float InitialAngle => ref Projectile.ai[1]; // Angle aimed in (with constraints)
         private ref float Timer => ref Projectile.ai[2]; // Timer to keep track of progression of each stage
         private ref float Progress => ref Projectile.localAI[1]; // Position of projectile relative to initial angle
-        private ref float Size => ref Projectile.localAI[2]; // Size of sword
+        private ref float Size => ref Projectile.localAI[2]; // Size of weapon
 
         // We define timing functions for each stage, taking into account melee attack speed
         // Note that you can change this to suit the need of your projectile
         private float prepTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
 
-        private float execTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
+        private float execTime => 6f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
 
         private float hideTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
+
+        //Reverse properties
+        private float reverseSwingexecTime => 10f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
 
         //Stab properties
         private float stabExecTime => execTime * STAB_EXECUTION_MULTIPLIER;
@@ -200,7 +231,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             Projectile.tileCollide = false; // Projectile does not collide with tiles
             Projectile.usesLocalNPCImmunity = true; // Uses local immunity frames
             Projectile.localNPCHitCooldown = -1; // We set this to -1 to make sure the projectile doesn't hit twice
-            Projectile.ownerHitCheck = true; // Make sure the owner of the projectile has line of sight to the target (aka can't hit things through tile).
+            Projectile.ownerHitCheck = false; // Make sure the owner of the projectile has line of sight to the target (aka can't hit things through tile). true BORING!!! / false HELL YEAH!!!
             Projectile.DamageType = DamageClass.Summon; // Projectile is a summoner projectile
         }
 
@@ -215,6 +246,10 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             if (CurrentAttack == AttackType.Spin)
             {
                 InitialAngle = (float)(-Math.PI / 2 - Math.PI / 3 * Projectile.spriteDirection); // For the spin, starting angle is designated based on direction of hit
+            }
+            else if (CurrentAttack == AttackType.ReverseSwing)
+            {
+                InitialAngle = (float)(Math.PI / 2 + Math.PI / 3 *Projectile.spriteDirection);
             }
             else if (CurrentAttack == AttackType.Stab)
             {
@@ -240,17 +275,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
                 InitialAngle = targetAngle - FIRSTHALFSWING * SWINGRANGE * Projectile.spriteDirection; // Otherwise, we calculate the angle
             }
-        }
-
-        public override void SendExtraAI(BinaryWriter writer)
-        {
-            // Projectile.spriteDirection for this projectile is derived from the mouse position of the owner in OnSpawn, as such it needs to be synced. spriteDirection is not one of the fields automatically synced over the network. All Projectile.ai slots are used already, so we will sync it manually.
-            writer.Write((sbyte)Projectile.spriteDirection);
-        }
-
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            Projectile.spriteDirection = reader.ReadSByte();
         }
 
         public override void AI()
@@ -284,6 +308,18 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
             SetGuanDaoPosition();
             Timer++;
+        }
+
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            // Projectile.spriteDirection for this projectile is derived from the mouse position of the owner in OnSpawn, as such it needs to be synced.
+            // spriteDirection is not one of the fields automatically synced over the network. All Projectile.ai slots are used already, so we will sync it manually.
+            writer.Write((sbyte)Projectile.spriteDirection);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            Projectile.spriteDirection = reader.ReadSByte();
         }
 
         private void CreateSlashDust()
@@ -380,7 +416,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
                 Dust dust = Dust.NewDustPerfect(
                     spawnPosition,
-                    DustID.Torch,
+                    DustID.Blood,
                     velocity,
                     100,
                     Color.OrangeRed,
@@ -402,19 +438,54 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
             if (Projectile.spriteDirection > 0)
             {
-                origin = new Vector2(0f, texture.Height);
-                rotationOffset = MathHelper.ToRadians(45f);
-                effects = SpriteEffects.None;
+                if (CurrentAttack == AttackType.ReverseSwing)
+                {
+                    origin = new Vector2(
+                        texture.Width,
+                        texture.Height
+                    );
+
+                    rotationOffset = MathHelper.ToRadians(135f);
+                    effects = SpriteEffects.FlipHorizontally;
+                }
+                else
+                {
+                    if (CurrentAttack == AttackType.Spin)
+                    { origin = new Vector2(-40, texture.Height - 40f); }
+                    else
+                    { origin = new Vector2(0f, texture.Height); }
+                    
+                    rotationOffset = MathHelper.ToRadians(45f);
+                    effects = SpriteEffects.None;
+                }
             }
             else
             {
-                origin = new Vector2(
-                    texture.Width,
-                    texture.Height
-                );
+                if (CurrentAttack == AttackType.ReverseSwing)
+                {
+                    origin = new Vector2(0f, texture.Height);
+                    rotationOffset = MathHelper.ToRadians(45f);
+                    effects = SpriteEffects.None;
+                }
+                else {
+                    if (CurrentAttack == AttackType.Spin)
+                    {
+                        origin = new Vector2(
+                            texture.Width - 40f,
+                            texture.Height - 40f
+                        );
+                    }
+                    else
+                    {
+                        origin = new Vector2(
+                            texture.Width,
+                            texture.Height
+                        );
+                    }
 
-                rotationOffset = MathHelper.ToRadians(135f);
-                effects = SpriteEffects.FlipHorizontally;
+                    rotationOffset = MathHelper.ToRadians(135f);
+                    effects = SpriteEffects.FlipHorizontally;
+                }
             }
 
             // Draw the Guan Dao behind the vfx.
@@ -436,7 +507,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             // We handled drawing manually.
             return false;
         }
-
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
@@ -495,6 +565,9 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 case AttackType.Swing:
                     return 1.00f;
 
+                case AttackType.ReverseSwing:
+                    return 1.2f;
+
                 case AttackType.Stab:
                     return 1.5f;
 
@@ -523,6 +596,12 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             modifiers.HitDirectionOverride = target.position.X > Owner.MountedCenter.X ? 1 : -1;
 
             modifiers.SourceDamage *= GetFinalDamageMultiplier(target);
+
+            // Stab's peel knockback.
+            if (CurrentAttack == AttackType.Stab)
+            {
+                modifiers.Knockback += 2f;
+            }
 
             // Preserve the spin's extra knockback.
             if (CurrentAttack == AttackType.Spin)
@@ -591,7 +670,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         }
 
         // Function facilitating the first half of the swing
-
         private void ExecuteStrike()
         {
             // PHASE 1: SLASH
@@ -614,7 +692,27 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 }
             }
 
-            // PHASE 2: STAB
+            // PHASE 2: UPPER SLASH
+            else if (CurrentAttack == AttackType.ReverseSwing)
+            {
+                // Move the weapon along its curved swing trajectory.
+                Progress = MathHelper.SmoothStep(
+                    0f,
+                    -SWINGRANGE,
+                    (1f - UNWIND) * Timer / reverseSwingexecTime
+                );
+
+                // Emit dust during the slash.
+                CreateSlashDust();
+
+                // Finish the attack when its execution time expires.
+                if (Timer >= execTime)
+                {
+                    CurrentStage = AttackStage.Unwind;
+                }
+            }
+
+            // PHASE 3: STAB
             else if (CurrentAttack == AttackType.Stab)
             {
                 // Thrust from the hand toward the target.
@@ -662,7 +760,18 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             if (CurrentAttack == AttackType.Swing)
             {
                 Progress = MathHelper.SmoothStep(0, SWINGRANGE, (1f - UNWIND) + UNWIND * Timer / hideTime);
-                Size = 1f - MathHelper.SmoothStep(0, 1, Timer / hideTime); // Make sword slowly decrease in size as we end the swing to make a smooth hiding animation
+                //Size = 1f - MathHelper.SmoothStep(0.5f, 1, Timer / hideTime); // Make weapon slowly decrease in size as we end the swing to make a smooth hiding animation
+
+                if (Timer >= hideTime)
+                {
+                    Projectile.Kill();
+                }
+            }
+
+            if (CurrentAttack == AttackType.ReverseSwing)
+            {
+                Progress = MathHelper.SmoothStep(0, SWINGRANGE, (1f - UNWIND) + UNWIND * Timer / hideTime);
+                //Size = 1f - MathHelper.SmoothStep(0.5f, 1, Timer / hideTime); // Make weapon slowly decrease in size as we end the swing to make a smooth hiding animation
 
                 if (Timer >= hideTime)
                 {
@@ -678,12 +787,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                     0f,
                     1f,
                     MathHelper.Clamp(Timer / stabHideTime, 0f, 1f)
-                );
-
-                Size = 1f - MathHelper.SmoothStep(
-                    1f,
-                    1f,
-                    Timer / stabHideTime
                 );
 
                 if (Timer >= stabHideTime)

@@ -72,14 +72,9 @@ namespace ChinaManWuxiaNovel.Content.Items.Weapons
             }
         }
 
-        public override bool Shoot(
-            Player player,
-            EntitySource_ItemUse_WithAmmo source,
-            Vector2 position,
-            Vector2 velocity,
-            int type,
-            int damage,
-            float knockback)
+        public override bool Shoot( Player player, EntitySource_ItemUse_WithAmmo source,
+                                    Vector2 position, Vector2 velocity,
+                                    int type, int damage, float knockback )
         {
             // Pass the current combo phase to the projectile.
             Projectile.NewProjectile(
@@ -94,7 +89,7 @@ namespace ChinaManWuxiaNovel.Content.Items.Weapons
             );
 
             // Move to the next phase: slash -> stab -> spin.
-            attackType = (attackType + 1) % 3;
+            attackType = (attackType + 1) % 4;
 
             // Timer to continue the combo.
             comboExpireTimer = 60;
