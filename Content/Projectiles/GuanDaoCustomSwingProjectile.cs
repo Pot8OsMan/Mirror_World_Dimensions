@@ -212,7 +212,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private float hideTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
 
         //Reverse properties
-        private float reverseSwingexecTime => 10f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
+        private float reverseSwingexecTime => 6f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
 
         //Stab properties
         private float stabExecTime => execTime * STAB_EXECUTION_MULTIPLIER;
@@ -256,7 +256,14 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             }
             else if (CurrentAttack == AttackType.ReverseSwing)
             {
-                InitialAngle = (float)(Math.PI / 2 *Projectile.spriteDirection);
+                if (Projectile.spriteDirection == 1)
+                {
+                    InitialAngle = (float)(-Math.PI / 2 - Math.PI * Projectile.spriteDirection);
+                }
+                else
+                {
+                    InitialAngle = (float)(Math.PI / 2 - 1.8f * Math.PI * Projectile.spriteDirection);
+                }
             }
             else if (CurrentAttack == AttackType.Stab)
             {
@@ -665,13 +672,13 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             // Stab's peel knockback.
             if (CurrentAttack == AttackType.Stab)
             {
-                modifiers.Knockback += 2f;
+                modifiers.Knockback += 1f;
             }
 
             // Preserve the spin's extra knockback.
             if (CurrentAttack == AttackType.SpinStomp)
             {
-                modifiers.Knockback += 1f;
+                modifiers.Knockback += 3f;
             }
         }
 
@@ -683,6 +690,10 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             {
                 // Keep the blade pointed in one direction.
                 Projectile.rotation = InitialAngle;
+            }
+            else if (CurrentAttack == AttackType.ReverseSwing)
+            {
+                Projectile.rotation = InitialAngle + Progress;
             }
             else
             {
@@ -761,17 +772,24 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             else if (CurrentAttack == AttackType.ReverseSwing)
             {
                 // Move the weapon along its curved swing trajectory.
+                float swingDirection =
+                    Projectile.spriteDirection == 1 ? -1f : 1f;
+
                 Progress = MathHelper.SmoothStep(
                     0f,
-                    -SWINGRANGE,
-                    (1f - UNWIND) * Timer / reverseSwingexecTime
+                    swingDirection * SWINGRANGE,
+                    MathHelper.Clamp(
+                        (1f - UNWIND) * Timer / reverseSwingexecTime,
+                        0f,
+                        1f
+                    )
                 );
 
                 // Emit dust during the slash.
                 CreateSlashDust();
 
                 // Finish the attack when its execution time expires.
-                if (Timer >= execTime)
+                if (Timer >= reverseSwingexecTime)
                 {
                     CurrentStage = AttackStage.Unwind;
                 }
@@ -829,7 +847,19 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
             if (CurrentAttack == AttackType.ReverseSwing)
             {
-                Progress = MathHelper.SmoothStep(0, SWINGRANGE, (1f - UNWIND) + UNWIND * Timer / hideTime);
+                float swingDirection =
+                    Projectile.spriteDirection == 1 ? -1f : 1f;
+
+                Progress = MathHelper.SmoothStep(
+                    0f,
+                    swingDirection * SWINGRANGE,
+                    MathHelper.Clamp(
+                        (1f - UNWIND)
+                            + UNWIND * Timer / hideTime,
+                        0f,
+                        1f
+                    )
+                );
                 //Size = 1f - MathHelper.SmoothStep(0.5f, 1, Timer / hideTime); // Make weapon slowly decrease in size as we end the swing to make a smooth hiding animation
 
                 if (Timer >= hideTime)
