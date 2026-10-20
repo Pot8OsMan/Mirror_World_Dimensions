@@ -69,6 +69,10 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const float STOMP_FORWARD_OFFSET = 5f;
         private const float STOMP_RADIUS = 150f;
 
+        // =========================================
+        // STOMP ANIMATION SETTINGS
+        // =========================================
+
         private const float STOMP_RAISE_HEIGHT = 55f;
         private const float STOMP_FORWARD_DISTANCE = 35f;
 
@@ -537,10 +541,9 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         // Stomp attacks AoE hitbox position
         private Vector2 GetStompCenter()
         {
-            float facing = Projectile.spriteDirection;
-
             return new Vector2(
-                Owner.MountedCenter.X + facing * STOMP_FORWARD_OFFSET,
+                Owner.MountedCenter.X
+                    + Projectile.spriteDirection * STOMP_FORWARD_DISTANCE,
                 Owner.Bottom.Y - 8f
             );
         }
@@ -685,45 +688,127 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         // Function to easily set projectile and arm position
         public void SetGuanDaoPosition()
         {
-            // Set projectile rotation based on attck types
-            if (CurrentAttack == AttackType.Stab)
+            Vector2 armPosition;
+            float weaponRotation;
+
+            if (CurrentAttack == AttackType.SpinStomp &&
+                CurrentStage >= AttackStage.StompWindup)
             {
-                // Keep the blade pointed in one direction.
-                Projectile.rotation = InitialAngle;
-            }
-            else if (CurrentAttack == AttackType.ReverseSwing)
-            {
-                Projectile.rotation = InitialAngle + Progress;
+                // Start from the player model's normal hand position.
+                float handRotation =
+                    InitialAngle + Projectile.spriteDirection * Progress;
+
+                Owner.SetCompositeArmFront(
+                    true,
+                    Player.CompositeArmStretchAmount.Full,
+                    handRotation - MathHelper.PiOver2
+                );
+
+                armPosition = Owner.GetFrontHandPosition(
+                    Player.CompositeArmStretchAmount.Full,
+                    handRotation - MathHelper.PiOver2
+                );
+
+                armPosition.Y += Owner.gfxOffY;
+
+                // Normalize the animation progress for each stomp stage.
+                float stompProgress = 0f;
+
+                if (CurrentStage == AttackStage.StompWindup)
+                {
+                    stompProgress = MathHelper.Clamp(
+                        Timer / STOMP_WINDUP_TIME, 0f, 1f
+                    );
+
+                    // Raise the weapon before the impact.
+                    armPosition.Y -= STOMP_RAISE_HEIGHT * stompProgress;
+                    armPosition.X +=
+                        Projectile.spriteDirection * STOMP_FORWARD_DISTANCE * stompProgress;
+
+                    weaponRotation = MathHelper.Lerp(
+                        InitialAngle + Projectile.spriteDirection * SPINRANGE,
+                        InitialAngle + STOMP_RAISED_ANGLE,
+                        stompProgress
+                    );
+                }
+                else if (CurrentStage == AttackStage.StompImpact)
+                {
+                    stompProgress = MathHelper.Clamp(
+                        Timer / STOMP_IMPACT_TIME, 0f, 1f
+                    );
+
+                    // Slam down toward the ground.
+                    armPosition.Y -= STOMP_RAISE_HEIGHT * (1f - stompProgress);
+                    armPosition.X +=
+                        Projectile.spriteDirection * STOMP_FORWARD_DISTANCE;
+
+                    weaponRotation = MathHelper.Lerp(
+                        InitialAngle + STOMP_RAISED_ANGLE,
+                        InitialAngle + STOMP_DOWN_ANGLE,
+                        stompProgress
+                    );
+                }
+                else
+                {
+                    // Hold the final pose during recovery.
+                    armPosition.X +=
+                        Projectile.spriteDirection * STOMP_FORWARD_DISTANCE;
+
+                    weaponRotation = InitialAngle + STOMP_DOWN_ANGLE;
+                }
+
+                // Account for inverted gravity.
+                if (Owner.gravDir == -1f)
+                {
+                    armPosition.Y =
+                        Owner.Bottom.Y + (Owner.position.Y - armPosition.Y);
+                    weaponRotation = -weaponRotation;
+                }
+
+                Projectile.rotation = weaponRotation;
             }
             else
             {
-                // Preserve the curved movement of the slash and spin.
-                Projectile.rotation =
-                    InitialAngle + Projectile.spriteDirection * Progress;
-            }
+                // Set projectile rotation based on attck types
+                if (CurrentAttack == AttackType.Stab)
+                {
+                    // Keep the blade pointed in one direction.
+                    Projectile.rotation = InitialAngle;
+                }
+                else if (CurrentAttack == AttackType.ReverseSwing)
+                {
+                    Projectile.rotation = InitialAngle + Progress;
+                }
+                else
+                {
+                    // Preserve the curved movement of the slash and spin.
+                    Projectile.rotation =
+                        InitialAngle + Projectile.spriteDirection * Progress;
+                }
 
-            // Set composite arm allows you to set the rotation of the arm and stretch of the front and back arms independently
-            Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.ToRadians(90f)); // set arm position (90 degree offset since arm starts lowered)
-            Vector2 armPosition = Owner.GetFrontHandPosition(Player.CompositeArmStretchAmount.Full, Projectile.rotation - (float)Math.PI / 2); // get position of hand
+                // Set composite arm allows you to set the rotation of the arm and stretch of the front and back arms independently
+                Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.ToRadians(90f)); // set arm position (90 degree offset since arm starts lowered)
+                armPosition = Owner.GetFrontHandPosition(Player.CompositeArmStretchAmount.Full, Projectile.rotation - (float)Math.PI / 2); // get position of hand
 
-            // Adjust the position for reversed gravity.
-            if (Owner.gravDir == -1f)
-            {
-                Projectile.rotation = 0f - Projectile.rotation;
-                armPosition.Y = Owner.Bottom.Y + (Owner.position.Y - armPosition.Y);
-            }
+                // Adjust the position for reversed gravity.
+                if (Owner.gravDir == -1f)
+                {
+                    Projectile.rotation = 0f - Projectile.rotation;
+                    armPosition.Y = Owner.Bottom.Y + (Owner.position.Y - armPosition.Y);
+                }
 
-            armPosition.Y += Owner.gfxOffY;
+                armPosition.Y += Owner.gfxOffY;
 
-            // Stab motion
-            if (CurrentAttack == AttackType.Stab)
-            {
-                // During a stab, move the entire weapon forward
-                // instead of rotating it through a swing arc.
-                Vector2 thrustDirection =
-                    InitialAngle.ToRotationVector2();
+                // Stab motion
+                if (CurrentAttack == AttackType.Stab)
+                {
+                    // During a stab, move the entire weapon forward
+                    // instead of rotating it through a swing arc.
+                    Vector2 thrustDirection =
+                        InitialAngle.ToRotationVector2();
 
-                armPosition += thrustDirection * STAB_DISTANCE * Progress;
+                    armPosition += thrustDirection * STAB_DISTANCE * Progress;
+                }
             }
 
             Projectile.Center = armPosition; // Set projectile to arm position
@@ -903,8 +988,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             // Hold the weapon in its repositioned pose.
             // Animate the weapon moving upward/downward in front of player model
             // in SetGuanDaoPosition() as the next visual refinement.
-            Progress = SPINRANGE;
-
             if (Timer >= STOMP_WINDUP_TIME)
             {
                 CurrentStage = AttackStage.StompImpact;
@@ -914,8 +997,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private void StompImpact()
         {
             // Keep the weapon at the impact pose.
-            Progress = SPINRANGE;
-
             if (Timer == 0)
             {
                 SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);

@@ -72,9 +72,9 @@ namespace ChinaManWuxiaNovel.Content.Items.Weapons
             }
         }
 
-        public override bool Shoot( Player player, EntitySource_ItemUse_WithAmmo source,
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source,
                                     Vector2 position, Vector2 velocity,
-                                    int type, int damage, float knockback )
+                                    int type, int damage, float knockback)
         {
             // Pass the current combo phase to the projectile.
             Projectile.NewProjectile(
