@@ -35,6 +35,17 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const int SLASH_FRAME_COUNT = 6;
         private const int SLASH_FRAME_SPEED = 2;
 
+        private static readonly SoundStyle SlashSound =
+            new("ChinaManWuxiaNovel/Sounds/Weapons/LandOfIllusionGuanDao/GuanDaoSlashSound")
+            {
+                Volume = 0.8f
+            };
+        private static readonly SoundStyle ReverseSlashSound =
+            new("ChinaManWuxiaNovel/Sounds/Weapons/LandOfIllusionGuanDao/GuanDaoUpperSlashSound")
+            {
+                Volume = 0.8f
+            };
+
         // =========================================
         // STAB ANIMATION SETTINGS
         // =========================================
@@ -45,6 +56,12 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
         private const int STAB_FRAME_COUNT = 4;
         private const int STAB_FRAME_SPEED = 1;
+
+        private static readonly SoundStyle StabSound =
+            new("ChinaManWuxiaNovel/Sounds/Weapons/LandOfIllusionGuanDao/GuanDaoStabSound")
+            {
+                Volume = 0.8f
+            };
 
         // =========================================
         // SPIN ANIMATION SETTINGS
@@ -57,6 +74,12 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
         private const float STOMP_RADIUS = 120f;
 
+        private static readonly SoundStyle SpinSound =
+            new("ChinaManWuxiaNovel/Sounds/Weapons/LandOfIllusionGuanDao/GuanDaoStompSound")
+            {
+                Volume = 0.9f
+            };
+
         // =========================================
         // STOMP ANIMATION SETTINGS
         // =========================================
@@ -67,7 +90,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         // Weapon sprite rotation offsets relative to its spin pose.
         private const float STOMP_RAISED_ANGLE = -0.65f;
         private const float STOMP_DOWN_ANGLE = 1f;
-
 
         // Path to the vertical sprite sheet.
         private Texture2D SlashTexture =>
@@ -669,7 +691,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             // Preserve the spin's extra knockback.
             if (CurrentAttack == AttackType.SpinStomp)
             {
-                modifiers.Knockback += 3f;
+                modifiers.Knockback += 2f;
             }
         }
 
@@ -823,7 +845,24 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
             if (Timer >= prepTime)
             {
-                SoundEngine.PlaySound(SoundID.Item1); // Play sword sound here since playing it on spawn is too early
+                switch (CurrentAttack)
+                {
+                    case AttackType.Swing:
+                        SoundEngine.PlaySound(SlashSound, Owner.Center);
+                        break;
+
+                    case AttackType.ReverseSwing:
+                        SoundEngine.PlaySound(ReverseSlashSound, Owner.Center);
+                        break;
+
+                    case AttackType.Stab:
+                        SoundEngine.PlaySound(StabSound, Owner.Center);
+                        break;
+
+                    case AttackType.SpinStomp:
+                        SoundEngine.PlaySound(SpinSound, Owner.Center);
+                        break;
+                }
                 CurrentStage = AttackStage.Execute; // If attack is over prep time, we go to next stage
             }
         }
@@ -858,7 +897,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
                 Progress = MathHelper.SmoothStep(
                     0f,
-                    swingDirection * SWINGRANGE,
+                    swingDirection * (SWINGRANGE/2),
                     MathHelper.Clamp( (1f - UNWIND) * Timer / reverseSwingexecTime, 0f, 1f) );
 
                 // Emit dust during the slash.
