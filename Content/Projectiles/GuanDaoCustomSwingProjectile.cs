@@ -36,17 +36,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const int SLASH_FRAME_SPEED = 2;
 
         // =========================================
-        // UPPER SLASH ANIMATION SETTINGS
-        // =========================================
-
-        private const float UPPER_SLASH_SCALE = 1f;
-        private const float UPPERSLASH_WEAPON_REACH = 100f;
-
-        private const int UPPER_SLASH_FRAME_COUNT = 6;
-        private const int UPPER_SLASH_FRAME_SPEED = 2;
-
-
-        // =========================================
         // STAB ANIMATION SETTINGS
         // =========================================
 
@@ -66,19 +55,18 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const float STOMP_IMPACT_TIME = 3f;
         private const float STOMP_RECOVERY_TIME = 10f;
 
-        private const float STOMP_FORWARD_OFFSET = 5f;
-        private const float STOMP_RADIUS = 150f;
+        private const float STOMP_RADIUS = 120f;
 
         // =========================================
         // STOMP ANIMATION SETTINGS
         // =========================================
 
         private const float STOMP_RAISE_HEIGHT = 55f;
-        private const float STOMP_FORWARD_DISTANCE = 35f;
+        private const float STOMP_FORWARD_DISTANCE = 5f;
 
         // Weapon sprite rotation offsets relative to its spin pose.
         private const float STOMP_RAISED_ANGLE = -0.65f;
-        private const float STOMP_DOWN_ANGLE = 0.9f;
+        private const float STOMP_DOWN_ANGLE = 1f;
 
 
         // Path to the vertical sprite sheet.
@@ -701,12 +689,12 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 Owner.SetCompositeArmFront(
                     true,
                     Player.CompositeArmStretchAmount.Full,
-                    handRotation - MathHelper.PiOver2
+                    handRotation + MathHelper.Pi
                 );
 
                 armPosition = Owner.GetFrontHandPosition(
                     Player.CompositeArmStretchAmount.Full,
-                    handRotation - MathHelper.PiOver2
+                    handRotation + MathHelper.Pi
                 );
 
                 armPosition.Y += Owner.gfxOffY;
@@ -750,11 +738,21 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 }
                 else
                 {
-                    // Hold the final pose during recovery.
-                    armPosition.X +=
-                        Projectile.spriteDirection * STOMP_FORWARD_DISTANCE;
-
-                    weaponRotation = InitialAngle + STOMP_DOWN_ANGLE;
+                    if (Projectile.spriteDirection == 1)
+                    {
+                        armPosition.X += Projectile.spriteDirection * STOMP_FORWARD_DISTANCE;
+                        weaponRotation = InitialAngle + STOMP_DOWN_ANGLE;
+                    }
+                    else
+                    {
+                        Owner.SetCompositeArmFront(
+                            true,
+                            Player.CompositeArmStretchAmount.Full,
+                            handRotation + 2*MathHelper.Pi
+                        );
+                        armPosition.X += Projectile.spriteDirection * (STOMP_FORWARD_DISTANCE + 15f);
+                        weaponRotation = InitialAngle - STOMP_DOWN_ANGLE;
+                    }
                 }
 
                 // Account for inverted gravity.
@@ -840,8 +838,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 Progress = MathHelper.SmoothStep(
                     0f,
                     SWINGRANGE,
-                    (1f - UNWIND) * Timer / execTime
-                );
+                    MathHelper.Clamp((1f - UNWIND) * Timer / execTime, 0f, 1f));
 
                 // Emit dust during the slash.
                 CreateSlashDust();
@@ -857,18 +854,12 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             else if (CurrentAttack == AttackType.ReverseSwing)
             {
                 // Move the weapon along its curved swing trajectory.
-                float swingDirection =
-                    Projectile.spriteDirection == 1 ? -1f : 1f;
+                float swingDirection = Projectile.spriteDirection == 1 ? -1f : 1f;
 
                 Progress = MathHelper.SmoothStep(
                     0f,
                     swingDirection * SWINGRANGE,
-                    MathHelper.Clamp(
-                        (1f - UNWIND) * Timer / reverseSwingexecTime,
-                        0f,
-                        1f
-                    )
-                );
+                    MathHelper.Clamp( (1f - UNWIND) * Timer / reverseSwingexecTime, 0f, 1f) );
 
                 // Emit dust during the slash.
                 CreateSlashDust();
