@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
+using ChinaManWuxiaNovel.Content.Projectiles.GuanDaoMoveset;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
-using Terraria;
 using Terraria.ModLoader;
 
 namespace ChinaManWuxiaNovel.Content.Projectiles
@@ -165,6 +166,42 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 Projectile.scale * SLASH_SCALE,
                 effects,
                 0f
+            );
+        }
+
+        private void SpawnForwardSlash()
+        {
+            Player player = Main.player[Projectile.owner];
+
+            if (player == null || !player.active || player.dead)
+                return;
+
+            // Aim toward the cursor's world position.
+            Vector2 cursorPosition = Main.MouseWorld;
+
+            Vector2 direction = cursorPosition - player.MountedCenter;
+
+            if (direction.LengthSquared() < 0.001f)
+                direction = new Vector2(player.direction, 0f);
+
+            direction.Normalize();
+
+            // Replace this with your actual calculated weapon tip position
+            // if your current weapon-positioning code already provides it.
+            Vector2 weaponTip = player.MountedCenter
+                + direction * 80f;
+
+            // Spawn 10 pixels beyond the weapon tip.
+            Vector2 spawnPosition = weaponTip + direction * 10f;
+
+            Projectile.NewProjectile(
+                Projectile.GetSource_FromThis(),
+                spawnPosition,
+                direction * 14f,
+                ModContent.ProjectileType<GuanDaoSlashProjectile>(),
+                Projectile.damage,
+                Projectile.knockBack,
+                Projectile.owner
             );
         }
 
@@ -542,7 +579,8 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             );
 
             // Vfx infront the weapon.
-            DrawSlashEffect(lightColor);
+            //DrawSlashEffect(lightColor);
+            SpawnForwardSlash();
 
             // We handled drawing manually.
             return false;
