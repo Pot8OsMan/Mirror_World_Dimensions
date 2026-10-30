@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ChinaManWuxiaNovel.Content.Projectiles.GuanDaoMoveset;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -33,8 +32,21 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const float SLASH_SCALE = 1f;
         private const float WEAPON_REACH = 100f;
 
+        // Slash sprite-sheet animation.
         private const int SLASH_FRAME_COUNT = 6;
         private const int SLASH_FRAME_SPEED = 2;
+
+        // Vfx Projectile Travel behaviour.
+        private const float SLASH_START_OFFSET = 10f;
+        private const float SLASH_SPEED = 14f;
+        private const int SLASH_LIFETIME = SLASH_FRAME_COUNT * SLASH_FRAME_SPEED;
+
+        // Runtime state for the travelling slash effect.
+        private bool slashEffectActive;
+        private Vector2 slashEffectPosition;    // current world position
+        private Vector2 slashEffectVelocity;    // direction and speed
+        private float slashEffectRotation;      // angle used to draw slash
+        private int slashEffectTimer;           // effect's timeline
 
         private static readonly SoundStyle SlashSound =
             new("ChinaManWuxiaNovel/Sounds/Weapons/LandOfIllusionGuanDao/GuanDaoSlashSound")
@@ -101,13 +113,11 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         // Select which frame to show based on the attack timer.
         private int GetSlashFrame()
         {
-            int frame = (int)(Timer / SLASH_FRAME_SPEED);
-
             return Math.Clamp(
-                frame,
-                0,
-                SLASH_FRAME_COUNT - 1
-            );
+               slashEffectTimer / SLASH_FRAME_SPEED,
+               0,
+               SLASH_FRAME_COUNT - 1
+           );
         }
         
         private enum AttackType // Which attack is being performed
@@ -118,19 +128,48 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             SpinStomp = 3    // Phase 4: Spin-stomp
         }
 
+        private void LaunchSlashEffect()
+        {
+            // Start from the weapon's tip.
+            Vector2 weaponDirection =
+                Projectile.rotation.ToRotationVector2();
+
+            Vector2 weaponTip =
+                Projectile.Center
+                + weaponDirection * WEAPON_REACH * Projectile.scale;
+
+            // Aim toward the cursor at the moment the slash is launched.
+            Vector2 aimDirection =
+                Main.MouseWorld - weaponTip;
+
+            // Prevent an invalid direction if the cursor overlaps the tip.
+            aimDirection = aimDirection.SafeNormalize(weaponDirection);
+
+            // Offset the slash slightly beyond the weapon's tip.
+            slashEffectPosition =
+                weaponTip + aimDirection * SLASH_START_OFFSET;
+
+            // Give the effect its own forward velocity.
+            slashEffectVelocity = aimDirection * SLASH_SPEED;
+
+            // Align the long axis of the sprite with its travel direction.
+            slashEffectRotation = aimDirection.ToRotation();
+
+            // Reset the effect's animation.
+            slashEffectTimer = 0;
+            slashEffectActive = true;
+        }
+
         // Draw the smear separately from the weapon.
         private void DrawSlashEffect(Color lightColor)
         {
-            // Only display the smear during a slash.
-            if (CurrentAttack != AttackType.Swing ||
-                CurrentStage != AttackStage.Execute)
-            {
+            // Draw only while the travelling effect is active.
+            if (!slashEffectActive)
                 return;
-            }
 
             Texture2D texture = SlashTexture;
 
-            // The sprite sheet contains 6 vertically stacked frames.
+            // Six vertically stacked frames.
             int frameHeight = texture.Height / SLASH_FRAME_COUNT;
             int frame = GetSlashFrame();
 
@@ -141,68 +180,42 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 frameHeight
             );
 
-            // Pivot: bottom-left when facing right,
-            // bottom-right when facing left.
-            Vector2 origin = Projectile.spriteDirection > 0
-                ? new Vector2(0f, frameHeight)
-                : new Vector2(texture.Width, frameHeight);
-
-            SpriteEffects effects = Projectile.spriteDirection > 0
-                ? SpriteEffects.None
-                : SpriteEffects.FlipHorizontally;
-
-            // Match the weapon's existing sprite orientation.
-            float rotationOffset = Projectile.spriteDirection > 0
-                ? MathHelper.ToRadians(45f)
-                : MathHelper.ToRadians(135f);
+            // The sprite's left-center is its launch origin.
+            // The sprite is assumed to point toward the right by default.
+            Vector2 origin = new Vector2(
+                0f,
+                frameHeight / 2f
+            );
 
             Main.spriteBatch.Draw(
                 texture,
-                Projectile.Center - Main.screenPosition,
+                slashEffectPosition - Main.screenPosition,
                 source,
                 lightColor * Projectile.Opacity,
-                Projectile.rotation + rotationOffset,
+                slashEffectRotation,
                 origin,
                 Projectile.scale * SLASH_SCALE,
-                effects,
+                SpriteEffects.None,
                 0f
             );
         }
 
-        private void SpawnForwardSlash()
+        private void UpdateSlashEffect()
         {
-            Player player = Main.player[Projectile.owner];
-
-            if (player == null || !player.active || player.dead)
+            if (!slashEffectActive)
                 return;
 
-            // Aim toward the cursor's world position.
-            Vector2 cursorPosition = Main.MouseWorld;
+            // Travel independently of the weapon.
+            slashEffectPosition += slashEffectVelocity;
 
-            Vector2 direction = cursorPosition - player.MountedCenter;
+            // Advance the animation.
+            slashEffectTimer++;
 
-            if (direction.LengthSquared() < 0.001f)
-                direction = new Vector2(player.direction, 0f);
-
-            direction.Normalize();
-
-            // Replace this with your actual calculated weapon tip position
-            // if your current weapon-positioning code already provides it.
-            Vector2 weaponTip = player.MountedCenter
-                + direction * 80f;
-
-            // Spawn 10 pixels beyond the weapon tip.
-            Vector2 spawnPosition = weaponTip + direction * 10f;
-
-            Projectile.NewProjectile(
-                Projectile.GetSource_FromThis(),
-                spawnPosition,
-                direction * 14f,
-                ModContent.ProjectileType<GuanDaoSlashProjectile>(),
-                Projectile.damage,
-                Projectile.knockBack,
-                Projectile.owner
-            );
+            // End the effect when all six frames have played.
+            if (slashEffectTimer >= SLASH_LIFETIME)
+            {
+                slashEffectActive = false;
+            }
         }
 
         private enum AttackStage // What stage of the attack is being executed, see functions found in AI for description
@@ -382,6 +395,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             }
 
             SetGuanDaoPosition();
+            UpdateSlashEffect();
             Timer++;
         }
 
@@ -579,8 +593,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             );
 
             // Vfx infront the weapon.
-            //DrawSlashEffect(lightColor);
-            SpawnForwardSlash();
+            DrawSlashEffect(lightColor);
 
             // We handled drawing manually.
             return false;
@@ -911,6 +924,11 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             // PHASE 1: SLASH
             if (CurrentAttack == AttackType.Swing)
             {
+                if (Timer == 0)
+                {
+                    LaunchSlashEffect();
+                }
+
                 // Move the weapon along its curved swing trajectory.
                 Progress = MathHelper.SmoothStep(
                     0f,
