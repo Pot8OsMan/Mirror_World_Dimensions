@@ -42,6 +42,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const int SLASH_LIFETIME = SLASH_FRAME_COUNT * SLASH_FRAME_SPEED;
 
         // Runtime state for the travelling slash effect.
+        private bool slashLaunchPending;
         private bool slashEffectActive;
         private Vector2 slashEffectPosition;    // current world position
         private Vector2 slashEffectVelocity;    // direction and speed
@@ -130,32 +131,24 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
         private void LaunchSlashEffect()
         {
-            // Start from the weapon's tip.
-            Vector2 weaponDirection =
-                Projectile.rotation.ToRotationVector2();
+            // Start directly from the Guan Dao projectile's center.
+            slashEffectPosition = Projectile.Center;
 
-            Vector2 weaponTip =
-                Projectile.Center
-                + weaponDirection * WEAPON_REACH * Projectile.scale;
+            // Calculate a straight-line direction toward the cursor.
+            Vector2 aimDirection = Main.MouseWorld - slashEffectPosition;
 
-            // Aim toward the cursor at the moment the slash is launched.
-            Vector2 aimDirection =
-                Main.MouseWorld - weaponTip;
+            // Use the weapon's current direction if the cursor overlaps the center.
+            aimDirection = aimDirection.SafeNormalize(
+                Projectile.rotation.ToRotationVector2()
+            );
 
-            // Prevent an invalid direction if the cursor overlaps the tip.
-            aimDirection = aimDirection.SafeNormalize(weaponDirection);
-
-            // Offset the slash slightly beyond the weapon's tip.
-            slashEffectPosition =
-                weaponTip + aimDirection * SLASH_START_OFFSET;
-
-            // Give the effect its own forward velocity.
+            // Give the slash independent forward movement.
             slashEffectVelocity = aimDirection * SLASH_SPEED;
 
-            // Align the long axis of the sprite with its travel direction.
+            // Rotate the sprite to face its travel direction.
             slashEffectRotation = aimDirection.ToRotation();
 
-            // Reset the effect's animation.
+            // Reset the animation.
             slashEffectTimer = 0;
             slashEffectActive = true;
         }
@@ -395,7 +388,17 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             }
 
             SetGuanDaoPosition();
-            UpdateSlashEffect();
+            if (slashLaunchPending)
+            {
+                LaunchSlashEffect();
+                slashLaunchPending = false;
+            }
+            else
+            {
+                // Move and animate the slash independently.
+                UpdateSlashEffect();
+            }
+
             Timer++;
         }
 
@@ -926,7 +929,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             {
                 if (Timer == 0)
                 {
-                    LaunchSlashEffect();
+                    slashLaunchPending = true;
                 }
 
                 // Move the weapon along its curved swing trajectory.
