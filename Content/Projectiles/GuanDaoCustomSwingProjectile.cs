@@ -283,7 +283,8 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
             SetGuanDaoPosition();
 
-            if (CurrentAttack == AttackType.Swing && CurrentStage == AttackStage.Execute &&
+            if ((CurrentAttack == AttackType.Swing || CurrentAttack == AttackType.ReverseSwing) 
+                && CurrentStage == AttackStage.Execute &&
                 Timer == 1 && !slashEffectActive)
             {
                 LaunchSlashEffect();
@@ -530,6 +531,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 return;
 
             Texture2D texture = SlashTexture;
+            SpriteEffects effects;
 
             // Six vertically stacked frames.
             int frameHeight = texture.Height / SLASH_FRAME_COUNT;
@@ -549,9 +551,16 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
             // The sprite's left-center is its origin.
             Vector2 origin = new Vector2(
-                120f,
+                100f,
                 frameHeight / 2f
             );
+
+            effects = Projectile.spriteDirection < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+            if (CurrentAttack == AttackType.ReverseSwing)
+            {
+                effects = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
+            }
 
             Main.spriteBatch.Draw(
                 texture,
@@ -561,7 +570,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 slashEffectRotation,
                 origin,
                 SLASH_SCALE,
-                SpriteEffects.None,
+                effects,
                 0f
             );
         }
@@ -917,6 +926,11 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             {
                 // Move the weapon along its curved swing trajectory.
                 float swingDirection = Projectile.spriteDirection == 1 ? -1f : 1f;
+
+                if (Timer == 0)
+                {
+                    LaunchSlashEffect();
+                }
 
                 Progress = MathHelper.SmoothStep(
                     0f,

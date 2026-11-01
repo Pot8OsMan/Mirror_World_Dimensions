@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using ChinaManWuxiaNovel.Content.Players;
 
 namespace ChinaManWuxiaNovel.Content.Items.Armor
 {
@@ -25,6 +26,11 @@ namespace ChinaManWuxiaNovel.Content.Items.Armor
         {
             player.setBonus = "[Combat Start] Apply 1 Defense Power Up (5% defense) with every other allies. (Max 12)";
             player.moveSpeed += 8f;
+        }
+
+        public override void UpdateEquip(Player player)
+        {
+            player.GetModPlayer<LordOfHongyuan>().HasHongLuJadeEye = true;
         }
 
         public override void AddRecipes()
