@@ -37,13 +37,12 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const int SLASH_FRAME_SPEED = 2;
 
         // Vfx Projectile Travel behaviour.
-        private const float SLASH_START_OFFSET = 10f;
         private const float SLASH_SPEED = 14f;
         private const int SLASH_LIFETIME = SLASH_FRAME_COUNT * SLASH_FRAME_SPEED;
-
         // Runtime state for the travelling slash effect.
-        private bool slashLaunchPending;
         private bool slashEffectActive;
+
+        private Vector2 slashEffectOffset;
         private Vector2 slashEffectPosition;    // current world position
         private Vector2 slashEffectVelocity;    // direction and speed
         private float slashEffectRotation;      // angle used to draw slash
@@ -108,18 +107,8 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         // Path to the vertical sprite sheet.
         private Texture2D SlashTexture =>
             ModContent.Request<Texture2D>(
-                "ChinaManWuxiaNovel/Content/Projectiles/GuanDaoMoveset/SlashEffect"
+                "ChinaManWuxiaNovel/Content/Projectiles/VFX/SlashEffect"
             ).Value;
-
-        // Select which frame to show based on the attack timer.
-        private int GetSlashFrame()
-        {
-            return Math.Clamp(
-               slashEffectTimer / SLASH_FRAME_SPEED,
-               0,
-               SLASH_FRAME_COUNT - 1
-           );
-        }
         
         private enum AttackType // Which attack is being performed
         {
@@ -127,88 +116,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             ReverseSwing = 1,  // Phase 2: Upper Slash
             Stab = 2,  // Phase 3: Thrust
             SpinStomp = 3    // Phase 4: Spin-stomp
-        }
-
-        private void LaunchSlashEffect()
-        {
-            // Start directly from the Guan Dao projectile's center.
-            slashEffectPosition = Projectile.Center;
-
-            // Calculate a straight-line direction toward the cursor.
-            Vector2 aimDirection = Main.MouseWorld - slashEffectPosition;
-
-            // Use the weapon's current direction if the cursor overlaps the center.
-            aimDirection = aimDirection.SafeNormalize(
-                Projectile.rotation.ToRotationVector2()
-            );
-
-            // Give the slash independent forward movement.
-            slashEffectVelocity = aimDirection * SLASH_SPEED;
-
-            // Rotate the sprite to face its travel direction.
-            slashEffectRotation = aimDirection.ToRotation();
-
-            // Reset the animation.
-            slashEffectTimer = 0;
-            slashEffectActive = true;
-        }
-
-        // Draw the smear separately from the weapon.
-        private void DrawSlashEffect(Color lightColor)
-        {
-            // Draw only while the travelling effect is active.
-            if (!slashEffectActive)
-                return;
-
-            Texture2D texture = SlashTexture;
-
-            // Six vertically stacked frames.
-            int frameHeight = texture.Height / SLASH_FRAME_COUNT;
-            int frame = GetSlashFrame();
-
-            Rectangle source = new Rectangle(
-                0,
-                frame * frameHeight,
-                texture.Width,
-                frameHeight
-            );
-
-            // The sprite's left-center is its launch origin.
-            // The sprite is assumed to point toward the right by default.
-            Vector2 origin = new Vector2(
-                0f,
-                frameHeight / 2f
-            );
-
-            Main.spriteBatch.Draw(
-                texture,
-                slashEffectPosition - Main.screenPosition,
-                source,
-                lightColor * Projectile.Opacity,
-                slashEffectRotation,
-                origin,
-                Projectile.scale * SLASH_SCALE,
-                SpriteEffects.None,
-                0f
-            );
-        }
-
-        private void UpdateSlashEffect()
-        {
-            if (!slashEffectActive)
-                return;
-
-            // Travel independently of the weapon.
-            slashEffectPosition += slashEffectVelocity;
-
-            // Advance the animation.
-            slashEffectTimer++;
-
-            // End the effect when all six frames have played.
-            if (slashEffectTimer >= SLASH_LIFETIME)
-            {
-                slashEffectActive = false;
-            }
         }
 
         private enum AttackStage // What stage of the attack is being executed, see functions found in AI for description
@@ -240,20 +147,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             }
         }
 
-        private enum ComboAttack
-        {
-            Slash,
-            ReverseSlash,
-            Stab,
-            SpinStomp,
-        }
-
-        private ComboAttack CurrentCombo
-        {
-            get => (ComboAttack)Projectile.ai[0];
-            set => Projectile.ai[0] = (float)value;
-        }
-
         // Variables to keep track of during runtime
         private ref float InitialAngle => ref Projectile.ai[1]; // Angle aimed in (with constraints)
         private ref float Timer => ref Projectile.ai[2]; // Timer to keep track of progression of each stage
@@ -276,7 +169,8 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
         private float stabHideTime => hideTime * STAB_RETRACT_MULTIPLIER;
 
-        public override string Texture => "ChinaManWuxiaNovel/Content/Items/Weapons/LandOfIllusionGuanDao"; // Projectile texture
+        public override string Texture => "ChinaManWuxiaNovel/Content/Items/Weapons/LandOfIllusionGuanDao"; // Override the dumbass search for .png resources of the same name
+
         private Player Owner => Main.player[Projectile.owner]; //Player position
 
         public override void SetStaticDefaults()
@@ -388,15 +282,23 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             }
 
             SetGuanDaoPosition();
-            if (slashLaunchPending)
+
+            if (CurrentAttack == AttackType.Swing && CurrentStage == AttackStage.Execute &&
+                Timer == 1 && !slashEffectActive)
             {
                 LaunchSlashEffect();
-                slashLaunchPending = false;
             }
-            else
+
+            if (slashEffectActive)
             {
-                // Move and animate the slash independently.
-                UpdateSlashEffect();
+                slashEffectPosition = Owner.Center + slashEffectOffset;
+
+                slashEffectTimer++;
+
+                if (slashEffectTimer >= SLASH_LIFETIME)
+                {
+                    slashEffectActive = false;
+                }
             }
 
             Timer++;
@@ -600,6 +502,68 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
             // We handled drawing manually.
             return false;
+        }
+
+        private void LaunchSlashEffect()
+        {
+            // Capture the position once.
+            slashEffectOffset = Projectile.Center - Owner.Center;
+
+            // Aim toward the cursor.
+            Vector2 aimDirection = Main.MouseWorld - slashEffectPosition;
+
+            aimDirection = aimDirection.SafeNormalize(
+                Projectile.rotation.ToRotationVector2()
+            );
+
+            slashEffectRotation = aimDirection.ToRotation();
+
+            // Reset the animation.
+            slashEffectTimer = 0;
+            slashEffectActive = true;
+        }
+
+        // Draw the VFX separately from the weapon.
+        private void DrawSlashEffect(Color lightColor)
+        {
+            if (!slashEffectActive)
+                return;
+
+            Texture2D texture = SlashTexture;
+
+            // Six vertically stacked frames.
+            int frameHeight = texture.Height / SLASH_FRAME_COUNT;
+
+            int frame = Math.Clamp(
+                slashEffectTimer / SLASH_FRAME_SPEED,
+                0,
+                SLASH_FRAME_COUNT - 1
+            );
+
+            Rectangle source = new Rectangle(
+                0,
+                frame * frameHeight,
+                texture.Width,
+                frameHeight
+            );
+
+            // The sprite's left-center is its origin.
+            Vector2 origin = new Vector2(
+                120f,
+                frameHeight / 2f
+            );
+
+            Main.spriteBatch.Draw(
+                texture,
+                slashEffectPosition - Main.screenPosition,
+                source,
+                lightColor,
+                slashEffectRotation,
+                origin,
+                SLASH_SCALE,
+                SpriteEffects.None,
+                0f
+            );
         }
 
         // Stomp attacks AoE hitbox position
@@ -929,14 +893,14 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             {
                 if (Timer == 0)
                 {
-                    slashLaunchPending = true;
+                    LaunchSlashEffect();
                 }
-
                 // Move the weapon along its curved swing trajectory.
                 Progress = MathHelper.SmoothStep(
                     0f,
                     SWINGRANGE,
-                    MathHelper.Clamp((1f - UNWIND) * Timer / execTime, 0f, 1f));
+                    MathHelper.Clamp((1f - UNWIND) * Timer / execTime, 0f, 1f)
+                );
 
                 // Emit dust during the slash.
                 CreateSlashDust();
