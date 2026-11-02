@@ -37,7 +37,6 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const int SLASH_FRAME_SPEED = 2;
 
         // Vfx Projectile Travel behaviour.
-        private const float SLASH_SPEED = 14f;
         private const int SLASH_LIFETIME = SLASH_FRAME_COUNT * SLASH_FRAME_SPEED;
         // Runtime state for the travelling slash effect.
         private bool slashEffectActive;
@@ -45,7 +44,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private Vector2 slashEffectOffset;
         private Vector2 slashEffectPosition;    // current world position
         private Vector2 slashEffectVelocity;    // direction and speed
-        private float slashEffectRotation;      // angle used to draw slash
+        private float slashEffectRotation;      // angle used to draw sprite
         private int slashEffectTimer;           // effect's timeline
 
         private static readonly SoundStyle SlashSound =
@@ -67,8 +66,21 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const float STAB_EXECUTION_MULTIPLIER = 0.8f;
         private const float STAB_RETRACT_MULTIPLIER = 0.6f;
 
-        private const int STAB_FRAME_COUNT = 4;
-        private const int STAB_FRAME_SPEED = 1;
+        private const float STAB_SCALE = 1f;
+
+        private const int STAB_FRAME_COUNT = 6;
+        private const int STAB_FRAME_SPEED = 2;
+
+        // Vfx Projectile Travel behaviour.
+        private const int STAB_LIFETIME = STAB_FRAME_COUNT * STAB_FRAME_SPEED;
+        // Runtime state for the travelling slash effect.
+        private bool stabEffectActive;
+
+        private Vector2 stabEffectOffset;
+        private Vector2 stabEffectPosition;    // current world position
+        private Vector2 stabEffectVelocity;    // direction and speed
+        private float stabEffectRotation;      // angle used to draw sprite
+        private int stabEffectTimer;           // effect's timeline
 
         private static readonly SoundStyle StabSound =
             new("ChinaManWuxiaNovel/Sounds/Weapons/LandOfIllusionGuanDao/GuanDaoStabSound")
@@ -104,12 +116,21 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const float STOMP_RAISED_ANGLE = -0.65f;
         private const float STOMP_DOWN_ANGLE = 1f;
 
-        // Path to the vertical sprite sheet.
+        // Path to the vfx sprite sheet.
         private Texture2D SlashTexture =>
             ModContent.Request<Texture2D>(
                 "ChinaManWuxiaNovel/Content/Projectiles/VFX/SlashEffect"
             ).Value;
-        
+        private Texture2D UpperSlashTexture =>
+            ModContent.Request<Texture2D>(
+                "ChinaManWuxiaNovel/Content/Projectiles/VFX/UpperSlashEffect"
+            ).Value;
+
+        private Texture2D StabTexture =>
+            ModContent.Request<Texture2D>(
+                "ChinaManWuxiaNovel/Content/Projectiles/VFX/StabEffect"
+            ).Value;
+
         private enum AttackType // Which attack is being performed
         {
             Swing = 0, // Phase 1: Slash
@@ -289,16 +310,35 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             {
                 LaunchSlashEffect();
             }
+            
+            if (CurrentAttack == AttackType.Stab
+                && CurrentStage == AttackStage.Execute &&
+                Timer == 1 && !stabEffectActive)
+            {
+                LaunchStabEffect();
+            }
 
             if (slashEffectActive)
             {
-                slashEffectPosition = Owner.Center + slashEffectOffset;
+                slashEffectPosition = Projectile.Center;
 
                 slashEffectTimer++;
 
                 if (slashEffectTimer >= SLASH_LIFETIME)
                 {
                     slashEffectActive = false;
+                }
+            }
+            
+            if (stabEffectActive)
+            {
+                stabEffectPosition = Projectile.Center;
+
+                stabEffectTimer++;
+
+                if (stabEffectTimer >= STAB_LIFETIME)
+                {
+                    stabEffectActive = false;
                 }
             }
 
@@ -500,24 +540,21 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
             // Vfx infront the weapon.
             DrawSlashEffect(lightColor);
-
-            // We handled drawing manually.
+            DrawStabEffect(lightColor);
+            // Handle drawing manually.
             return false;
         }
 
         private void LaunchSlashEffect()
         {
+            float rotationOffset = Projectile.spriteDirection < 0 ? MathHelper.ToRadians(45f) : MathHelper.ToRadians(135f);
             // Capture the position once.
-            slashEffectOffset = Projectile.Center - Owner.Center;
+            slashEffectPosition = Projectile.Center;
 
             // Aim toward the cursor.
-            Vector2 aimDirection = Main.MouseWorld - slashEffectPosition;
+            slashEffectRotation = Projectile.rotation;
 
-            aimDirection = aimDirection.SafeNormalize(
-                Projectile.rotation.ToRotationVector2()
-            );
-
-            slashEffectRotation = aimDirection.ToRotation();
+            if (CurrentAttack == AttackType.ReverseSwing) { slashEffectRotation = Projectile.rotation + rotationOffset; }
 
             // Reset the animation.
             slashEffectTimer = 0;
@@ -555,11 +592,11 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 frameHeight / 2f
             );
 
-            effects = Projectile.spriteDirection < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            effects = Projectile.spriteDirection < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
 
             if (CurrentAttack == AttackType.ReverseSwing)
             {
-                effects = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
+                texture = UpperSlashTexture;
             }
 
             Main.spriteBatch.Draw(
@@ -570,6 +607,64 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
                 slashEffectRotation,
                 origin,
                 SLASH_SCALE,
+                effects,
+                0f
+            );
+        }
+
+        private void LaunchStabEffect()
+        {
+            // Capture the position once.
+            stabEffectPosition = Projectile.Center;
+            // Aim toward the cursor.
+            stabEffectRotation = Projectile.rotation;
+
+            // Reset the animation.
+            stabEffectTimer = 0;
+            stabEffectActive = true;
+        }
+
+        // Draw the VFX separately from the weapon.
+        private void DrawStabEffect(Color lightColor)
+        {
+            if (!stabEffectActive)
+                return;
+
+            Texture2D texture = StabTexture;
+            SpriteEffects effects;
+
+            // Six vertically stacked frames.
+            int frameHeight = texture.Height / STAB_FRAME_COUNT;
+
+            int frame = Math.Clamp(
+                stabEffectTimer / STAB_FRAME_SPEED,
+                0,
+                STAB_FRAME_COUNT - 1
+            );
+
+            Rectangle source = new Rectangle(
+                0,
+                frame * frameHeight,
+                texture.Width,
+                frameHeight
+            );
+
+            // The sprite's left-center is its origin.
+            Vector2 origin = new Vector2(
+                0f,
+                frameHeight / 2f
+            );
+
+            effects = Projectile.spriteDirection < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
+
+            Main.spriteBatch.Draw(
+                texture,
+                stabEffectPosition - Main.screenPosition,
+                source,
+                lightColor,
+                stabEffectRotation,
+                origin,
+                STAB_SCALE,
                 effects,
                 0f
             );
@@ -900,10 +995,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             // PHASE 1: SLASH
             if (CurrentAttack == AttackType.Swing)
             {
-                if (Timer == 0)
-                {
-                    LaunchSlashEffect();
-                }
+                LaunchSlashEffect();
                 // Move the weapon along its curved swing trajectory.
                 Progress = MathHelper.SmoothStep(
                     0f,
@@ -926,12 +1018,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             {
                 // Move the weapon along its curved swing trajectory.
                 float swingDirection = Projectile.spriteDirection == 1 ? -1f : 1f;
-
-                if (Timer == 0)
-                {
-                    LaunchSlashEffect();
-                }
-
+                LaunchSlashEffect();
                 Progress = MathHelper.SmoothStep(
                     0f,
                     swingDirection * (SWINGRANGE/2),
@@ -950,6 +1037,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             // PHASE 3: STAB
             else if (CurrentAttack == AttackType.Stab)
             {
+                LaunchStabEffect();
                 // Thrust from the hand toward the target.
                 Progress = MathHelper.SmoothStep(
                     0f,

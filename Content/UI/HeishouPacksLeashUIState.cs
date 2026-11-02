@@ -27,10 +27,10 @@ namespace ChinaManWuxiaNovel.Content.UI
 
             toggleButton = new UIImageButton(helmetTexture);
 
-            toggleButton.Left.Set(20f, 0f);
-            toggleButton.Top.Set(300f, 0f);
-            toggleButton.Width.Set(48f, 0f);
-            toggleButton.Height.Set(48f, 0f);
+            toggleButton.Left.Set(500f, 0f);
+            toggleButton.Top.Set(30f, 0f);
+            toggleButton.Width.Set(64f, 0f);
+            toggleButton.Height.Set(64f, 0f);
 
             toggleButton.OnLeftClick += ToggleMenu;
 
@@ -39,10 +39,10 @@ namespace ChinaManWuxiaNovel.Content.UI
             // Create the menu, but keep it hidden initially.
             menuPanel = new UIPanel();
 
-            menuPanel.Left.Set(80f, 0f);
-            menuPanel.Top.Set(300f, 0f);
-            menuPanel.Width.Set(300f, 0f);
-            menuPanel.Height.Set(200f, 0f);
+            menuPanel.Left.Set(200f, 0f);
+            menuPanel.Top.Set(80f, 0f);
+            menuPanel.Width.Set(600f, 0f);
+            menuPanel.Height.Set(400f, 0f);
 
             menuPanel.SetPadding(12f);
 
