@@ -547,7 +547,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
         private void LaunchSlashEffect()
         {
-            float rotationOffset = Projectile.spriteDirection < 0 ? MathHelper.ToRadians(45f) : MathHelper.ToRadians(135f);
+            float rotationOffset = Projectile.spriteDirection < 0 ? MathHelper.ToRadians(120f) : MathHelper.ToRadians(-90f);
             // Capture the position once.
             slashEffectPosition = Projectile.Center;
 
