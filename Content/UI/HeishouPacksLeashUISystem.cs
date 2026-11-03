@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ChinaManWuxiaNovel.Content.Players;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -51,9 +53,7 @@ namespace ChinaManWuxiaNovel.Content.UI
             }
         }
 
-        public override void ModifyInterfaceLayers(
-            System.Collections.Generic.List<GameInterfaceLayer> layers
-        )
+        public override void ModifyInterfaceLayers(System.Collections.Generic.List<GameInterfaceLayer> layers)
         {
             int mouseTextIndex = layers.FindIndex(
                 layer => layer.Name.Equals("Vanilla: Mouse Text")
