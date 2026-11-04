@@ -588,7 +588,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
             // The sprite's left-center is its origin.
             Vector2 origin = new Vector2(
-                100f,
+                160f,
                 frameHeight / 2f
             );
 
@@ -597,6 +597,10 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             if (CurrentAttack == AttackType.ReverseSwing)
             {
                 texture = UpperSlashTexture;
+                origin = new Vector2(
+                    140f,
+                    frameHeight / 2f
+                );
             }
 
             Main.spriteBatch.Draw(
