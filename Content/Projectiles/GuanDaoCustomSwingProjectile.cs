@@ -655,7 +655,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
             // The sprite's left-center is its origin.
             Vector2 origin = new Vector2(
-                0f,
+                100f,
                 frameHeight / 2f
             );
 
