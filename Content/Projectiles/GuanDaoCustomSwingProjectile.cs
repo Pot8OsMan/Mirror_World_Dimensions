@@ -588,7 +588,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
 
             // The sprite's left-center is its origin.
             Vector2 origin = new Vector2(
-                160f,
+                180f,
                 frameHeight / 2f
             );
 
@@ -598,7 +598,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
             {
                 texture = UpperSlashTexture;
                 origin = new Vector2(
-                    140f,
+                    180f,
                     frameHeight / 2f
                 );
             }
