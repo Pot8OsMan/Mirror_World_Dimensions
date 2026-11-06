@@ -1,0 +1,12 @@
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaManWuxiaNovel\bin\Debug\net8.0\ChinaManWuxiaNovel.deps.json
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaManWuxiaNovel\bin\Debug\net8.0\ChinaManWuxiaNovel.dll
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaManWuxiaNovel\bin\Debug\net8.0\ChinaManWuxiaNovel.pdb
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaManWuxiaNovel\obj\Debug\net8.0\ChinaManWuxiaNovel.csproj.AssemblyReference.cache
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaManWuxiaNovel\obj\Debug\net8.0\ChinaManWuxiaNovel.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaManWuxiaNovel\obj\Debug\net8.0\ChinaManWuxiaNovel.AssemblyInfoInputs.cache
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaManWuxiaNovel\obj\Debug\net8.0\ChinaManWuxiaNovel.AssemblyInfo.cs
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaManWuxiaNovel\obj\Debug\net8.0\ChinaManWuxiaNovel.csproj.CoreCompileInputs.cache
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaManWuxiaNovel\obj\Debug\net8.0\ChinaManWuxiaNovel.dll
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaManWuxiaNovel\obj\Debug\net8.0\refint\ChinaManWuxiaNovel.dll
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaManWuxiaNovel\obj\Debug\net8.0\ChinaManWuxiaNovel.pdb
+C:\Users\ADMIN\OneDrive\Documents\My Games\Terraria\tModLoader\ModSources\ChinaManWuxiaNovel\obj\Debug\net8.0\ref\ChinaManWuxiaNovel.dll

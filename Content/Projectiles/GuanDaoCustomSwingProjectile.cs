@@ -69,7 +69,7 @@ namespace ChinaManWuxiaNovel.Content.Projectiles
         private const float STAB_SCALE = 1f;
 
         private const int STAB_FRAME_COUNT = 6;
-        private const int STAB_FRAME_SPEED = 2;
+        private const float STAB_FRAME_SPEED = 1.5f;
 
         // Vfx Projectile Travel behaviour.
         private const int STAB_LIFETIME = STAB_FRAME_COUNT * STAB_FRAME_SPEED;
