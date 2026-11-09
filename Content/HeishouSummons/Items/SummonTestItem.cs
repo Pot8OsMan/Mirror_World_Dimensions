@@ -31,6 +31,21 @@ namespace ChinaManWuxiaNovel.Content.HeishouSummons.Items
 
         public override bool? UseItem(Player player)
         {
+            int npcIndex = NPC.NewNPC(
+                player.GetSource_ItemUse(Item),
+                (int)player.Center.X,
+                (int)player.Center.Y,
+                ModContent.NPCType<Gregor>()
+            );
+
+            if (npcIndex >= 0 && npcIndex < Main.maxNPCs)
+            {
+                NPC summon = Main.npc[npcIndex];
+
+                summon.ai[0] = player.whoAmI;
+                summon.netUpdate = true;
+            }
+
             NPC.NewNPC(
                 player.GetSource_ItemUse(Item),
                 (int)player.Center.X,
