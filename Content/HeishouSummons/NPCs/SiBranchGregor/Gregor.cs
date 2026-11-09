@@ -38,7 +38,7 @@ namespace ChinaManWuxiaNovel.Content.HeishouSummons.NPCs.SiBranchGregor
 
             NPC.scale = 0.5f;
 
-            NPC.damage = 0;
+            NPC.damage = 20;
             NPC.defense = 10;
             NPC.lifeMax = 500;
 
