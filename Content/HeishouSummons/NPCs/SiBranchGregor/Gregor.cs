@@ -73,8 +73,8 @@ namespace ChinaManWuxiaNovel.Content.HeishouSummons.NPCs.SiBranchGregor
         private int currentAnimationFrame;
         private int animationTimer;
 
-        private const int FrameWidth = 64;
-        private const int FrameHeight = 64;
+        private const int FrameWidth = 256;
+        private const int FrameHeight = 128;
 
         private const int IdleRow = 0;
         private const int WalkRow = 1;
