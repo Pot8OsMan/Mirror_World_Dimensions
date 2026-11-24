@@ -35,8 +35,8 @@ namespace ChinaManWuxiaNovel.Content.HeishouSummons.NPCs.SiBranchGregor
 
         public override void SetDefaults()
         {
-            NPC.width = 20;
-            NPC.height = 40;
+            NPC.width = 40;
+            NPC.height = 60;
 
             NPC.scale = 0.5f;
 
