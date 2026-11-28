@@ -91,19 +91,19 @@ namespace ChinaManWuxiaNovel.Content.HeishouSummons.NPCs.SiBranchGregor
             {
                 case AnimationState.Idle:
                     row = IdleRow;
-                    frameCount = 4;
+                    frameCount = 6;
                     frameSpeed = 8;
                     break;
 
                 case AnimationState.Walking:
                     row = WalkRow;
-                    frameCount = 6;
+                    frameCount = 12;
                     frameSpeed = 6;
                     break;
 
                 case AnimationState.Attack:
                     row = AttackRow;
-                    frameCount = 6;
+                    frameCount = 12;
                     frameSpeed = 4;
                     break;
 
@@ -115,7 +115,7 @@ namespace ChinaManWuxiaNovel.Content.HeishouSummons.NPCs.SiBranchGregor
 
                 default:
                     row = IdleRow;
-                    frameCount = 4;
+                    frameCount = 6;
                     frameSpeed = 8;
                     break;
             }
